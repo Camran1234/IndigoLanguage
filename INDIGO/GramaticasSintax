@@ -1,0 +1,175 @@
+
+/*******************************NEW GRAMMAR********************************************/
+
+/* Declarates petitions */ LEVEL 1
+start with ip;
+	sp ->	LESS START GREATER
+	fp ->	LESS FINAL GREATER
+
+	so ->	LESS APERTURE COLON
+
+	ip ->	sp io fp 	
+	io ->	so partiture  ioa
+		|error ioa /* See if must change */ LEVEL 1
+
+	ioa ->	so partiture  ioa
+		|e
+		|error fp /* See if must change */ LEVEL 1
+/* End Declare Petitions */
+
+	
+
+/* INITIAL OF PARTITURE */ LEVEL 2
+	initu -> GREATER OPEN_CURLY CREDENTIAL COLON OPEN_BRACKET OPEN_CURLY 
+	close -> CLOSE_CURLY CLOSE_BRACKET CLOSE_CURLY LESSER CLOSE GREATER
+
+	initf -> GREATER OPEN_CURLY FORM_PARAMETERS COLON OPEN_BRACKET OPEN_CURLY 
+	initc -> GREATER OPEN_CURLY C_PARAMETERS COLON OPEN_BRACKET OPEN_CURLY
+
+	partiture -> 	keywordu 
+			|keywordf
+			|keywordc
+/* END OF PARTITURE */
+
+/* INITIAL OF USER COMMANDS */ LEVEL 3
+	/*****************************USERS************************************/
+		gcreate_partiture -> 	COMA gcreate_user
+					| close
+		gmodify_partiture ->	COMA gmodify_user
+					| close
+		glogin_partiture ->	COMA glogin_user
+					| close
+
+
+		gcreate ->	CREATE_U initu gcreate_user 
+				|error gcreate_user /* See if must change */ LEVEL 3
+		gcreate_user ->	USER COLON TEXTO COMA gcreate_partiture
+				|PASSWORD COLON TEXTO gcreate_partiture
+				|DATE COLON TEXTO gcreate_user_partiture
+				|error gcreate_user
+
+		gmodify ->	MODIFY_U initu gmodify_user
+				|error gmodify_user /* See if must change */ LEVEL 3
+		gmodify_user -> PAST_USER COLON TEXTO gmodify_partiture
+				|NEW_USER COLON TEXTO gmodify_partiture
+				|NEW_PASSWORD COLON TEXTO gmodify_partiture
+				|DATE COLON TEXTO gmodify_partiture
+				|error gmodify_user
+
+		gdelete ->	DELETE_U initu gdelete_user
+				|error gdelete_user /* SEE if must change */ LEVEL 3
+		gdelete_user ->	USER COLON TEXTO close
+				|error close
+
+		glogin ->	LOGIN_U initu glogin_user
+				|error glogin_user /* See if must change */ LEVEL 3
+		glogin_user ->	USER COLON TEXTO glogin_partiture
+				|PASSWORD COLON TEXTO glogin_partiture
+				|error glogin_user
+
+		keywordu -> 	gcreate 
+				|gmodify 
+				|gdelete
+				|glogin
+	******************************END_USERS*********************************
+
+	******************************FORM**************************************
+	
+		gcreatef_partiture ->	COMA gcreatef_form
+					|close
+		gmodifyf_partiture ->	COMA gmodifyf_form
+					|close
+		gdeletef_partiture ->	COMA gdeletef_form
+					|close
+
+		gcreatef ->	NEW_F initf gcreatef_form
+				|error gcreatef_form
+		gcreatef_form->	ID COLON TEXTO gcreatef_partiture
+				|TITTLE COLON TEXTO gcreatef_partiture
+				|NAME_F COLON TEXTO gcreatef_partiture
+				|TOPIC COLON TEXTO gcreatef_partiture
+				|error gcreatef_partiture
+		
+		gdeletef ->	DELETE_F initf gdeletef_form
+				|error gdeletef_form
+		gdeletef_form->	ID COLON TEXTO gcreatef_partiture
+				|error gdeletef_partiture
+	
+
+		gmodifyf ->	MODIFY_F initf gmodifyf_form
+				|error gmodifyf_form
+		gmodifyf_form->	ID COLON TEXTO gmodifyf_partiture
+				|TITTLE COLON TEXTO gmodifyf_partiture
+				|NAME_F COLON TEXTO gmodifyf_partiture
+				|TOPIC COLON TEXTO gmodifyf_partiture
+				|error gmodifyf_partiture
+
+		keywordf ->	gcreatef
+				|gdeletef
+				|gmodifyf				
+	
+	******************************END_FORM**********************************
+
+	*****************************COMPONENT**********************************
+		createc_partiture -> 	COMA createc_component
+					|close
+		modifyc_partiture ->	COMA modifyc_component
+					|close
+
+		classnames	->	TEXT_CAMP
+					|TEXT_AREA
+					|CHECKBOX
+					|RATIO
+					|FILE
+					|IMAGE
+					|COMBO
+					|BUTTON	
+
+		createc ->	ADD_C initc createc_component
+				|error createc_component
+		createc_component -> 	ID COLON TEXTO createc_partiture
+					|NAME_C COLON TEXTO createc_partiture
+					|FORM COLON TEXTO createc_partiture
+					|CLASS COLON TEXTO createc_partiture
+					|INDEX COLON TEXTO createc_partiture
+					|TEXTV COLON TEXTO createc_partiture
+					|ALIGN COLON TEXTO createc_partiture
+					|REQUIRED COLON TEXTO createc_partiture
+					|OPTIONS COLON TEXTO createc_partiture
+					|ROWS COLON TEXTO createc_partiture
+					|COLS COLON TEXTO createc_partiture
+					|URL COLON TEXTO createc_partiture
+
+		deletec ->	DELETE_C initc deletec_component
+				|error deletec_component
+		deletec_component ->	ID COLON TEXTO close
+					|error close
+
+		modifyc ->	MODIFY_C initc	modifyc_component
+				|error modifyc_component
+		modifyc_component ->ID COLON TEXTO modifyc_partiture
+				|NAME_C COLON TEXTO modifyc_partiture
+				|FORM COLON TEXTO modifyc_partiture
+				|CLASS COLON TEXTO modifyc_partiture
+				|INDEX COLON TEXTO modifyc_partiture
+				|TEXTV COLON TEXTO modifyc_partiture
+				|ALIGN COLON TEXTO modifyc_partiture
+				|REQUIRED COLON TEXTO modifyc_partiture
+				|OPTIONS COLON TEXTO modifyc_partiture
+				|ROWS COLON TEXTO modifyc_partiture
+				|COLS COLON TEXTO modifyc_partiture
+				|URL COLON TEXTO modifyc_partiture
+
+		keywordc ->	createc
+				|deletec
+				|modifyc
+		
+
+	******************************END_COMPONENT*****************************
+
+
+/* END OF USER COMMANDS */
+
+
+
+

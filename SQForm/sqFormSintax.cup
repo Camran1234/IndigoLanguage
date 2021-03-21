@@ -1,0 +1,64 @@
+package com.sqform.SQFormLanguage;
+import java_cup.runtime.*;
+import java.util.ArrayList;
+
+parser code {:
+
+
+:}
+
+terminal LESS, GREATER, APERTURE, COLON, OPEN_CURLY, CLOSE_CURLY,
+OPEN_BRACKET, CLOSE_BRACKET, QUOTE_D, COMA, END, CONSULTDATA,
+INQUIRIES, CONSULT, TO, SELECT, TEXT, NUMBER, SPECIFICATION,
+MORE_THAN, LESSER_THAN, DIFFERENCE, AND, OR, NOT, GREATEAPERTURE,
+GREATCLOSE, EQUAL, WHERE;
+
+non terminal beginning, multiple_start, multiple_close, sentence;
+
+start with  beginning;
+
+multiple_start ::= LESS GREATEAPERTURE GREATER;
+multiple_close ::= LESS GREATCLOSE GREATER;
+
+raw_start   ::= LESS APERTURE COLON CONSULTDATA GREATER; 
+open_request ::=   OPEN_CURLY INQUIRIES COLON OPEN_BRACKET OPEN_CURLY;
+close_request ::=   CLOSE_CURLY CLOSE_BRACKET CLOSE_CURLY;
+raw_close   ::= LESS END GREATER;
+
+begining ::= multiple_start sentence  multiple_close
+             |sentence
+             |error multiple_close;
+sentence ::= raw_start consult_data raw_close 
+            |error raw_close;
+
+consult_data ::= open_request CONSULT COLON operation  consult_data;
+                |/* empty */
+                |error consult_data;
+
+operation ::= QUOTE_D SELECT TO TEXT to_camps  QUOTE_D COMA
+                |/* empty */;
+
+to_camps ::= OPEN_BRACKET camps CLOSE_BRACKET conditions;
+
+camps ::=       TEXT camps_re
+                | /* empty */
+                | error CLOSE_BRACKET;
+camps_re ::=    COMA TEXT camps_re
+                | /* empty */;
+
+logic_operators ::= AND 
+                    |OR
+                    |NOT;
+operators ::=   MORE_THAN       
+                |LESSER_THAN
+                |DIFFERENCE
+                |EQUAL;
+
+conditions ::=  WHERE OPEN_BRACKET new_condition CLOSE_BRACKET
+                | /* empty */ ;
+
+new_condition ::= TEXT operators NUMBER new_condition_re
+                    |TEXT operators SPECIFICATION_re
+                    |error new_condition_re;
+new_condition_re ::= logic_operators TEXT operators 
+                    | /* empty */;

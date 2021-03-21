@@ -1,0 +1,402 @@
+package com.mycompany.indigo;
+
+import com.mycompany.handlers.ComponentCommands;
+import com.mycompany.handlers.FormCommands;
+import com.mycompany.handlers.UserCommands;
+import java.text.SimpleDateFormat;
+import com.mycompany.indigo.*;
+import java.util.Date;
+import java_cup.runtime.Symbol;
+
+parser code {:
+	UserCommands userCommands = new UserCommands();
+	FormCommands formCommands = new FormCommands();
+	ComponentCommands componentCommands = new ComponentCommands();
+	Login login = new Login();
+
+	
+	/* Getters*/
+		public UserCommands getUserCommands(){
+			return this.userCommands;
+		}
+		public FormCommands getFormCommands(){
+			return this.formCommands;
+		}
+		public ComponentCommands getComponentCommands(){
+			return this.componentCommands;
+		}
+	/* End Getters*/
+
+
+	/* Commands For User */	
+		 void startLogin(){
+			userCommands.startLogin();
+		}
+			 void loginUser(String user){
+				userCommands.loginUser(user);
+			}
+			 void loginPassword (String password){
+				userCommands.loginPassword(password);
+			}
+		 void closeLogin(){
+			userCommands.closeLogin();
+		}
+		
+
+		 void startUser(){
+			//Close any user before is open
+			userCommands.close();
+			//Open new user
+			userCommands.open();
+		}
+			 void addUserName(String name){
+				userCommands.addUser(name);
+			}
+			 void addUserPassword(String password){
+				userCommands.addPassword(password);
+
+			}
+			 void addUserDate(String date){
+				try{
+					Date actualDate = new SimpleDateFormat("yyyy-MM-dd").parse(date)
+					if(userCommands.state()){
+						userCommands.addPassword(actualDate);
+					}
+				}catch(Exception ex){
+					System.out.println("Error: "+ex.Message());
+				}
+			}
+		 void closeUser(){
+			userCommands.close();
+		}
+		 void deleteUser(String ID){
+			userCommands.delete(ID);
+		}
+		 void startModifyUser(){
+			userCommands.openModify();
+		}
+			 void addPastUser(String name){
+				userCommands.addPastUser(name);
+			}
+			 void addNewUser(String name){
+				userCommands.addNewUser(name);
+			}
+			 void addUserDate(String date){
+				try{
+					Date actualDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+					if(userCommands.state()){
+						userCommands.addPassword(actualDate);
+					}
+				}catch(Exception ex){
+					System.out.println("Error: "+ex.Message());
+				}
+			}
+		 void closeModifyUser(){
+			userCommands.closeModify();
+		}
+			
+	/* End Commands for User */
+
+	/* Commands for Form */
+		 void deleteForm(String ID){
+			formCommands.delete(ID);
+		}
+		 void startModifyForm(){
+			formCommands.openModify();
+		}
+		 void closeModifyForm(){
+			formCommands.closeModify();	
+		}
+		 void startForm(){
+			formCommands.close();
+			formCommands.start();	
+		}
+
+		 void closeForm(){
+			formCommands.close();
+		}
+
+			 void addIdForm(String ID){
+				formCommands.addId(String ID);
+			}
+			 void addTittleForm(String title){
+				formCommands.addTittle(tittle);
+			}
+			 void addNameForm(String name){
+				formCommands.addName(name);
+			}
+			 void addTopicForm(String topic){
+				formCommands.addTopic(topic);
+			}
+	/* End Commands for Form */
+
+	/* COMMANDS FOR COMPONENTS */
+		 void deleteComponent(String ID){
+			componentCommands.delete(ID);
+		}
+		 void startModifyComponent(){
+			componentCommands.openModify();
+		}
+		 void closeModifyComponent(){
+			componentCommands.closeModify();
+		}
+		 void startComponent(){
+			componentCommands.start();
+		}
+		 void closeComponent(){
+			componentCommands.close();
+		}
+			 void addIdComponent(String ID){
+				componentCommands.addId(String ID);
+			}
+			 void addnCampName(String camp){
+				componentCommands.addCampName(String camp);
+			}
+			 void addFormName(String name){
+				componentCommands.addFormName(name);
+			}
+			 void addClassName(String CLASS){
+				componentCommands.addClassName(CLASS);
+			}
+			 void addIndex(int index){
+				componentCommands.addIndex(index);
+			}
+			 void addVisible_Text(String visible){
+				componentCommands.addVisibleText(visible);
+			}
+			 void addAlign(String align){
+				componentCommands.addAlign(align);			
+			}
+			 void addRequired(String required){
+				componentCommands.addRequired(required);
+			}
+			 void addOptions(String options){
+				componentCommands.addOptions(options);
+			}
+			 void addRows(int rows){
+				componentCommands.addRows(rows);
+			}
+			 void addCols(int cols){
+				componentCommands.addCols(cols);
+			}
+			 void addImage(String url){
+				componentCommands.addUrl(url);
+			}
+	/* END COMPONENTS*/
+
+	@Override
+	public void syntax_error(Symbol symbol){
+		/*
+		//This code works better with report_error(String message, Object info) method
+		if (info instanceof String){
+			errors++; 
+			System.err.println("  "+ errors + "==> " + info + " "+ message + 
+							"\n       Parsing resumed from 2nd token before" + s.current_lexeme()+"\n");
+		}
+		else {
+			StringBuffer m = new StringBuffer("Error ");
+			if (info instanceof java_cup.runtime.Symbol) 
+			m.append( "("+info.toString()+")" );     
+			m.append(" : "+message);   
+			System.err.println(m);
+		}*/
+    	report_expected_token_ids();
+	    int line = symbol.left;
+	    int column = symbol.right;
+	    String token = (String) cur_token.value;
+	    //We get the production
+            String errorArmado="";
+            TokenHandler tokenHandler = new TokenHandler();
+            for(int index=0; index<expected_token_ids().size() ; index++){
+                //We traduce the token to a form that the user might understand
+                errorArmado += tokenHandler.expectedFormIndigo(symbl_name_from_id(expected_token_ids().get(index)));
+            }
+            String error = "Se esperaba la forma: " + errorArmado;
+            System.out.println("Error en token:"+token+"\n"+error+" \n Linea: "+line+", Columna: "+column);
+	}
+:}
+
+terminal START, FINAL, APERTURE, END, CREDENTIAL, USER, PASSWORD, DATE, PAST_USER, NEW_USER, NEW_PASSWORD, 
+CREATE_U, MODIFY_U, DELETE_U, LOGIN_U, NEW_F, DELETE_F, MODIFY_F, FORM_PARAMETERS, ID, TOPIC, NAME_F, 
+ADD_C, DELETE_C, MODIFY_C, C_PARAMETERS, NAME_C, FORM, CLASS, TEXTV, TEXT_CAMP, TEXT_AREA, 
+CHECKBOX, RATIO, FILE, IMAGE, COMBO, BUTTON, REQUIRED, OPTIONS, ROWS, COLS, URL,  TEXTWS, TEXTWIS, NUMBER, BOOL, POSALIGNMENT, COMA, LESS, GREATER, COLON,
+OPEN_CURLY, CLOSE_CURLY, OPEN_BRACKET, CLOSE_BRACKET, TITTLE, ALIGNMENT; 
+
+non terminal sp, fp, so, ip, io,close, initf, initc, partiture, gcreate_partiture,
+gmodify_partiture, glogin_partiture, gcreate, gcreate_user, gmodify, gmodify_user, gdelete, gdelete_user, glogin,
+glogin_user, keywordu, gcreatef_partiture, gmodifyf_partiture, gcreatef, gcreatef_form, gdeletef,
+gmodifyf, gmodifyf_form, keywordf, createc_partiture, modifyc_partiture, classnames, createc,
+createc_component, deletec, deletec_component, modifyc, modifyc_component, keywordc, initu, gdeletef_form;
+
+precedence left LESS;
+
+start with ip;
+/* LEVEL 1 */
+	sp ::=	LESS START GREATER;
+	fp ::=	LESS FINAL GREATER;
+
+	so ::=	LESS APERTURE COLON;
+
+	ip ::=	sp io fp
+			|io
+			|error fp;
+ 	
+	io ::=	so partiture io
+			|/*empty*/; 
+
+	
+/* LEVEL 2 */
+	initu ::= GREATER OPEN_CURLY CREDENTIAL COLON OPEN_BRACKET OPEN_CURLY;
+	close ::= CLOSE_CURLY CLOSE_BRACKET CLOSE_CURLY LESS END GREATER;
+
+	initf ::= GREATER OPEN_CURLY FORM_PARAMETERS COLON OPEN_BRACKET OPEN_CURLY;
+	initc ::= GREATER OPEN_CURLY C_PARAMETERS COLON OPEN_BRACKET OPEN_CURLY;
+
+	partiture ::= 	keywordu 
+			|keywordf
+			|keywordc;
+
+/*LEVEL 3 */
+	/* USERS */
+		gcreate_partiture ::= 	COMA gcreate_user
+					| close {: closeUser(); :}
+					|error close
+					|error gcreate_user
+					|error io fp;
+		gmodify_partiture ::=	COMA gmodify_user
+					| close {: closeModifyUser(); :}
+					|error close
+					|error gmodify_user
+					|error io fp;
+		glogin_partiture ::=	COMA glogin_user
+					| close {: closeLogin(); :}
+					|error close
+					|error glogin_user
+					|error io fp;
+
+
+		gcreate ::=	CREATE_U initu gcreate_user {: startUser();:};
+		gcreate_user ::= USER COLON TEXTWIS:text gcreate_partiture {: addUserName(String.valueOf(text).replace("\"","")); :}
+				|PASSWORD COLON TEXTWIS:text gcreate_partiture {: addUserPassword(String.valueOf(text).replace("\"","")); :}
+				|DATE COLON TEXTWIS:text gcreate_partiture {: addUserDate(String.valueOf(text).replace("\"","")); :}
+				 | error gcreate_user;
+
+		gmodify ::=	MODIFY_U initu gmodify_user {: startModifyUser();:};
+		gmodify_user ::= PAST_USER COLON TEXTWIS:text gmodify_partiture {: addPastUser(String.valueOf(text).replace("\"","")); :}
+				|NEW_USER COLON TEXTWIS:text gmodify_partiture {: addNewUser(String.valueOf(text).replace("\"","")); :}
+				|NEW_PASSWORD COLON TEXTWIS:text gmodify_partiture {: addUserPassword(String.valueOf(text).replace("\"","")); :}
+				|DATE COLON TEXTWIS:text gmodify_partiture {: addUserDate(String.valueOf(text).replace("\"","")); :}
+				| error gmodify_partiture;
+
+		gdelete ::=	DELETE_U initu gdelete_user;
+		gdelete_user ::= USER COLON TEXTWIS:text close {:deleteUser(String.valueOf(text).replace("\"",""));:}
+						|error gdelete_user;
+
+		glogin ::=	LOGIN_U initu glogin_user {:startLogin();:};
+		glogin_user ::=	USER COLON TEXTWIS:text glogin_partiture {: loginUser(String.valueOf(text).replace("\"","")); :}
+				|PASSWORD COLON TEXTWIS:text glogin_partiture {: loginPassword(String.valueOf(text).replace("\"","")); :}
+				| error glogin_user;
+
+		keywordu ::= 	gcreate 
+				|gmodify 
+				|gdelete
+				|glogin;
+	/* END USER */
+
+	/* FORM	*/
+		gcreatef_partiture ::=	COMA gcreatef_form
+					|close {: closeForm(); :}
+					|error close
+					|error io fp
+					|error gcreatef_form;
+		gmodifyf_partiture ::=	COMA gmodifyf_form
+					|close {: closeModifyForm(); :}
+					|error close
+					|error io fp
+					|error gmodifyf_form;
+
+		gcreatef ::=	NEW_F initf gcreatef_form {: startForm(); :};
+		gcreatef_form::= ID COLON TEXTWIS:text gcreatef_partiture {: addIdForm(String.valueOf(text).replace("\"","")); :}
+				|TITTLE COLON TEXTWS:text gcreatef_partiture {: addTittleForm(String.valueOf(text).replace("\"","")); :}
+				|NAME_F COLON TEXTWIS:text gcreatef_partiture {: addNameForm(String.valueOf(text).replace("\"","")); :}
+				|TOPIC COLON TEXTWS:text gcreatef_partiture {: addTopicForm(String.valueOf(text).replace("\"","")); :}
+				|error gcreatef_form;
+		
+		gdeletef ::=	DELETE_F initf gdeletef_form ;
+		gdeletef_form::= ID COLON TEXTWIS:text close {: deleteForm(String.valueOf(text).replace("\"","")); :};
+	
+		gmodifyf ::=	MODIFY_F initf gmodifyf_form {: startModifyForm(); :};
+		gmodifyf_form::= ID COLON TEXTWIS:text gmodifyf_partiture {: addIdForm(String.valueOf(text).replace("\"","")); :}
+				|TITTLE COLON TEXTWS:text gmodifyf_partiture {: addTittleForm(String.valueOf(text).replace("\"","")); :}
+				|NAME_F COLON TEXTWIS:text gmodifyf_partiture {: addNameForm(String.valueOf(text).replace("\"","")); :}
+				|TOPIC COLON TEXTWS:text gmodifyf_partiture {: addTopicForm(String.valueOf(text).replace("\"","")); :}
+				|error gmodifyf_form;
+
+		keywordf ::=	gcreatef
+				|gdeletef
+				|gmodifyf;	
+
+	/* END FORM */
+
+	/* COMPONENT */
+
+
+		modifyc_partiture ::=	COMA modifyc_component
+					|close {: closeModifyComponent(); :}
+					|error close
+					|error io fp
+					|error modifyc_component;
+		createc_partiture ::=	COMA modifyc_component
+					|close {: closeComponent(); :}
+					|error close
+					|error io fp
+					|error modifyc_component;
+
+		classnames	::=	TEXT_CAMP  {: RESULT = "TEXT_CAMP" :}
+					|TEXT_AREA {: RESULT = "TEXT_AREA" :}
+					|CHECKBOX {: RESULT = "CHECKBOX" :}
+					|RATIO {: RESULT = "RATIO" :}
+					|FILE {: RESULT = "FILE" :}
+					|IMAGE {: RESULT = "IMAGE" :}
+					|COMBO {: RESULT = "COMBO" :}
+					|BUTTON {: RESULT = "BUTTON" :} 
+					|error createc_partiture;
+
+		createc ::=	ADD_C initc createc_component {: startComponent(); :};
+
+		createc_component ::= 	ID COLON TEXTWIS:text createc_partiture {: addIdComponent(String.valueOf(text).replace("\"","")); :}
+					|NAME_C COLON TEXTWS:text createc_partiture {: addnCampName(String.valueOf(text).replace("\"","")); :}
+					|FORM COLON TEXTWIS:text createc_partiture {: addFormName(String.valueOf(text).replace("\"","")); :}
+					|CLASS COLON classnames:CLASS createc_partiture {: addClassName(String.valueOf(CLASS).replace("\"","")); :}
+					|OPTIONS COLON TEXTWS:text createc_partiture {: addOptions(String.valueOf(text).replace("\"","")); :}	
+					|TEXTV COLON TEXTWS:text createc_partiture {: addVisible_Text(String.valueOf(text).replace("\"","")); :}
+					|ALIGNMENT COLON POSALIGNMENT:text createc_partiture {: addAlign(String.valueOf(text).replace("\"","")); :}
+					|REQUIRED COLON BOOL:text createc_partiture {: addRequired(String.valueOf(text).replace("\"","")); :}
+					|ROWS COLON NUMBER:number createc_partiture {: addRows(Integer.parseInt(String.valueOf(number).replace("\"",""))); :}
+					|COLS COLON NUMBER:number createc_partiture {: addCols(Integer.parseInt(String.valueOf(number).replace("\"",""))); :}
+					|URL COLON TEXTWS:text createc_partiture {: addImage(String.valueOf(text).replace("\"","")); :}
+					|error createc_component;
+
+		deletec ::=	DELETE_C initc deletec_component ;
+		deletec_component ::=	ID COLON TEXTWS:text close {: deleteComponent(String.valueOf(text).replace("\"",""); :}
+								|error io;
+
+		modifyc ::=	MODIFY_C initc	modifyc_component {: startModifyComponent() :};
+		modifyc_component ::=ID COLON TEXTWIS:text modifyc_partiture {: addIdComponent(String.valueOf(text).replace("\"","")); :}
+					|NAME_C COLON TEXTWS:text modifyc_partiture {: addnCampName(String.valueOf(text).replace("\"","")); :}
+					|FORM COLON TEXTWIS:text modifyc_partiture {: addFormName(String.valueOf(text).replace("\"","")); :}
+					|CLASS COLON classnames:CLASS modifyc_partiture {: addClassName(String.valueOf(CLASS).replace("\"","")); :}
+					|OPTIONS COLON TEXTWS:text modifyc_partiture {: addOptions(String.valueOf(text).replace("\"","")); :}
+					|TEXTV COLON TEXTWS:text modifyc_partiture {: addVisible_Text(String.valueOf(text).replace("\"","")); :}
+					|ALIGNMENT COLON POSALIGNMENT:text modifyc_partiture {: addAlign(String.valueOf(text).replace("\"","")); :}
+					|REQUIRED COLON BOOL:text modifyc_partiture {: addRequired(String.valueOf(text).replace("\"","")); :}
+					|ROWS COLON NUMBER:number modifyc_partiture {: addRows(Integer.parseInt(String.valueOf(number).replace("\"",""))); :}
+					|COLS COLON NUMBER:number modifyc_partiture {: addCols(Integer.parseInt(String.valueOf(number).replace("\"",""))); :}
+					|URL COLON TEXTWS:text modifyc_partiture {: addImage(String.valueOf(text).replace("\"","")); :}
+					|error modifyc_component;
+
+		keywordc ::= createc
+				|deletec
+				|modifyc;
+	/* END COMPONENT */
+

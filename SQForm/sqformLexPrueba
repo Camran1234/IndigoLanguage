@@ -1,0 +1,70 @@
+
+%%
+
+%class SQForm
+%standalone
+%unicode
+%line
+%column
+%public
+
+%{
+	StringBuffer string = new StringBuffer();
+%}
+
+    LineTerminator = \r|\n|\r\n
+    WhiteSpace     = {LineTerminator} | [ \t\f]
+    NumbersIntegral = [0-9]+ 
+    TextNoSpace	= [^ \"]+
+%state STRING
+%%
+
+//Grammars
+
+	/* keywords */
+	<YYINITIAL> "!ini_solicitud"		{System.out.println("Token: APERTURE");}
+	<YYINITIAL> "fin_solicitud!"		{System.out.println("Token: END");}
+	<YYINITIAL> "!ini_solicitudes"		{System.out.println("Token: GREATAPERTURE");}
+	<YYINITIAL> "!fin_solicitudes"		{System.out.println("Token: GREATCLOSE");}
+	<YYINITIAL> "\"CONSULTAR_DATOS\""	{System.out.println("Token: CONSULTDATA");}
+	<YYINITIAL> "\"CONSULTAS\""		{System.out.println("Token: CONSULTAS");}
+	<YYINITIAL> "\"CONSULTA-[NumbersIntegral]\"" {System.out.println("Token: CONSULTA");}
+	<YYINITIAL> "SELECT TO FORM"		{System.out.println("Token: SELECT");}
+	<YYINITIAL> "DIFFERENCE" {System.out.println("Token: DIFFERENCE");}
+	<YYINITIAL> "AND"	{ System.out.println("Token: AND");}
+	<YYINITIAL> "OR"	{ System.out.println("Token: OR");}
+	<YYINITIAL> "NOT"	{ System.out.println("Token: NOT");}
+	<YYINITIAL> "WHERE"	{ System.out.println("Token: WHERE");}
+	<YYINITIAL> {
+		/* Simple Symbols */
+		"<"	{ System.out.println("Token: LESS"); }
+		">"	{ System.out.println("Token: GREATER"); }
+		":"	{ System.out.println("Token: COLON"); }
+		"{"	{ System.out.println("Token: OPEN_CURLY");}
+		"}"	{ System.out.println("Token: CLOSE_CURLY");}
+		"["	{ System.out.println("Token: OPEN_BRACKET");}
+		"]"	{ System.out.println("Token: CLOSE_BRACKET");}
+		","	{ System.out.println("Token: COMA"); }
+		"->"	{ System.out.println("Token: TO"); }
+		">="	{ System.out.println("Token: MORE_THAN");}
+		"<="	{ System.out.println("Token: LESSER_THAN");}
+		"="	{ System.out.println("Token: EQUAL");}
+		"\""	{System.out.println("Token: QUOTE_D");}
+		"\'"	{System.out.print("Cadena: "+yytext());
+				string.setLength(0); yybegin(STRING);}
+
+		/* Text */
+		{NumbersIntegral} {System.out.println("Token: NUMBER");}
+		{TextNoSpace} {System.out.println("Token: TEXT");}
+		{WhiteSpace}  {/* empty */}
+	}
+	
+	<STRING> {
+		\'	{ yybegin(YYINITIAL);
+			  String result = string.toString();
+			  System.out.println("Token: SPECIFICATION"); }
+		
+		[^\'\"]+	{ string.append(yytext()); }
+	}
+	
+	[^]	{System.out.println("Error en el lexema: "+yytext());}

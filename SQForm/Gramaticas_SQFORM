@@ -1,0 +1,33 @@
+************************************LENGUAJE SQFORMS*****************************************
+		LEXEMA				TOKEN	
+		<				LESS
+		>				GREATER
+		!ini_solicitud			APERTURE
+		!ini_solicitudes	GREATEAPERTURE		
+		!fin_solicitudes	GREATCLOSE
+		:				COLON
+		{				OPEN_CURLY
+		}				CLOSE_CURLY
+		[				OPEN_BRACKET
+		]				CLOSE_BRACKET
+		"				QUOTE_D
+		,				COMA
+		=				EQUAL
+		fin_solicitud!			END
+		"CONSULTAR_DATOS"		CONSULTDATA
+		"CONSULTAS"			INQUIRIES	
+		"CONSULTA-number"		CONSULT
+		->				TO
+		SELECT TO FORM			SELECT
+		WHERE					WHERE
+		(texto)(No blank spaces)	TEXT
+		NUMERO				NUMBER	
+		'TEXT'				SPECIFICATION
+		>=				MORE_THAN
+		<=				LESSER_THAN
+		<>				DIFFERENCE
+		AND				AND
+		OR				OR
+		NOT				NOT	
+		
+		
