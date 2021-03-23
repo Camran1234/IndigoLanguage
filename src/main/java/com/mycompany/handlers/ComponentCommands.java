@@ -49,10 +49,10 @@ public class ComponentCommands {
     public void addOptions(String options){
         /* Do Something */
     }
-    public void addRows(int rows){
+    public void addRows(String rows){
         /* Do Something */
     }
-    public void addCols(int cols){
+    public void addCols(String cols){
         /* Do Something */
     }
     public void addUrl(String url){

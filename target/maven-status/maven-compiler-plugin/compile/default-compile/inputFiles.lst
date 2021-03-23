@@ -1,8 +1,13 @@
 /home/camran1234/NetBeansProjects/Indigo/src/main/java/com/mycompany/indigo/IndigoLex.java
+/home/camran1234/NetBeansProjects/Indigo/src/main/java/com/mycompany/indigo/symIndigo.java
+/home/camran1234/NetBeansProjects/Indigo/src/main/java/com/mycompany/indigo/IndigoSyntax.java
+/home/camran1234/NetBeansProjects/Indigo/src/main/java/com/mycompany/formats/Login.java
+/home/camran1234/NetBeansProjects/Indigo/src/main/java/com/mycompany/handlers/FormCommands.java
+/home/camran1234/NetBeansProjects/Indigo/src/main/java/com/mycompany/formats/User.java
 /home/camran1234/NetBeansProjects/Indigo/src/main/java/com/mycompany/handlers/UserCommands.java
 /home/camran1234/NetBeansProjects/Indigo/src/main/java/com/mycompany/textvisor/IndigoWIndow.java
 /home/camran1234/NetBeansProjects/Indigo/src/main/java/com/mycompany/handlers/ComponentCommands.java
-/home/camran1234/NetBeansProjects/Indigo/src/main/java/com/mycompany/indigo/symIndigo.java
-/home/camran1234/NetBeansProjects/Indigo/src/main/java/com/mycompany/indigo/IndigoSyntax.java
-/home/camran1234/NetBeansProjects/Indigo/src/main/java/com/mycompany/handlers/FormCommands.java
+/home/camran1234/NetBeansProjects/Indigo/src/main/java/com/mycompany/formats/Error.java
+/home/camran1234/NetBeansProjects/Indigo/src/main/java/com/mycompany/handlers/ErrorCommands.java
+/home/camran1234/NetBeansProjects/Indigo/src/main/java/com/mycompany/indigo/TokenHandler.java
 /home/camran1234/NetBeansProjects/Indigo/src/main/java/com/mycompany/indigo/Analysis.java

@@ -14,67 +14,85 @@ import java.util.Date;
  *
  * @author camran1234
  */
-public class UserCommands {
-    
+public class UserCommands {    
     ArrayList<User> userList = new ArrayList<>();
+    ArrayList<User> modifyList = new ArrayList<>();
+    ArrayList<String> deleteList = new ArrayList<>();
     ArrayList<Login> loginList = new ArrayList<>();
+    ArrayList<Error> errors = new ArrayList<>();
     User user;
+    User userModify;
     Login login;
     
-    
-    public void startLogin(){
-        login = new Login();
+    /**
+     * Method to get Semantic errors of the list getted
+     */
+    public void checkForErrors(){
+        for(int indexUser=0; indexUser<userList.size(); indexUser++){
+            userList.get(indexUser).checkForSemanticErrors();
+        }
+        for(int indexModify=0; indexModify<modifyList.size(); indexModify++){
+            modifyList.get(indexModify).checkForSemanticErrors();
+        }
     }
     
+    public void startLogin(String token, int line, int column){
+        login = new Login(token, line, column);
+    }
     public void loginUser(String user){
-           /* Do Something */
+         login.getUser(user);
     }
     public void loginPassword (String password){
-        /* Do Something */
+        login.getPassword(password);
     }
     public void closeLogin(){
-        /* Do Something */
+        loginList.add(login);
+        login.closeLogin();
     }
     /* Init for user commands*/
     public void close(){
-        /* Do Something */
+        userList.add(user);
+        user.close();
     }
-    public void open(){
-        /* Do Something */
+    public void open(String token, int line, int column){
+        user = new User(token, line, column, "nuevo");
     }
     public void addUser(String name){
-        /* Do Something */
+        if(!user.getUser(name)){
+            userModify.getUser(name);
+        }
     }
     public void addPassword(String password){
-        /* Do Something */
+        if(!user.getPassword(password)){
+            userModify.getPassword(password);
+        }
     }
     
     public void addDate(Date date){
-        /* Do Something */
+        if(!user.getDate(date)){
+            userModify.getDate(date);
+        }
     }
     
-    public boolean state(){
-        /* Do Something */
-        return false;
-    }
     public void delete(String id){
-        /* Do Something */
+        deleteList.add(id);
     }
     /* Init of Modify */
-    public void openModify(){
-        /* Do Something */
+    public void openModify(String token, int line, int column){
+        userModify = new User(token, line, column,"modificado");
     }
     public void addPastUser(String name){
-        /* Do Something */
+        if(!user.getPastUser(name)){
+            userModify.getPastUser(name);
+        }
     }
     public void addNewUser(String name){
-        /* Do Something */
+        if(!user.getNewUser(name)){
+            userModify.getNewUser(name);
+        }
     }
     public void closeModify(){
-        /* Do Something */
+        modifyList.add(userModify);
+        userModify.close();
     }
-
-    
-    
-    
 }

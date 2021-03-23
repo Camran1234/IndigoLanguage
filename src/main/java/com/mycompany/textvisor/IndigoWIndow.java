@@ -6,7 +6,7 @@
 package com.mycompany.textvisor;
 
 import com.mycompany.indigo.Analysis;
-
+import com.mycompany.handlers.*;
 /**
  *
  * @author camran1234
@@ -36,6 +36,9 @@ public class IndigoWIndow extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         textAreaIndigo = new javax.swing.JTextArea();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        textAreaOutputIndigo = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -109,6 +112,31 @@ public class IndigoWIndow extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Indigo", jPanel1);
 
+        jPanel3.setBackground(new java.awt.Color(51, 51, 51));
+
+        textAreaOutputIndigo.setColumns(20);
+        textAreaOutputIndigo.setRows(5);
+        jScrollPane1.setViewportView(textAreaOutputIndigo);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 817, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(48, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 474, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(151, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Output Indigo", jPanel3);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -132,7 +160,7 @@ public class IndigoWIndow extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String texto = textAreaIndigo.getText();
         Analysis reader = new Analysis();
-        reader.readText(texto);
+        reader.readText(texto);        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -175,8 +203,11 @@ public class IndigoWIndow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextArea textAreaIndigo;
+    private javax.swing.JTextArea textAreaOutputIndigo;
     // End of variables declaration//GEN-END:variables
 }

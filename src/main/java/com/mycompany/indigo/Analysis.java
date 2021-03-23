@@ -5,6 +5,7 @@
  */
 package com.mycompany.indigo;
 
+import com.mycompany.handlers.*;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.logging.Level;
@@ -26,6 +27,11 @@ public class Analysis {
             IndigoLex scanner = new IndigoLex(reader);
             IndigoSyntax parser = new IndigoSyntax(scanner);
             parser.parse();
+            ErrorCommands errorCommands = parser.getErrorCommands();
+            UserCommands userCommands = parser.getUserCommands();
+            FormCommands formCommands = parser.getFormCommands();
+            ComponentCommands componentCommands = parser.getComponentCommands();
+            
             
         } catch (Exception ex) {
             System.out.println("ERROR: No se puede seguir traduciendo\n "+ex.getMessage());

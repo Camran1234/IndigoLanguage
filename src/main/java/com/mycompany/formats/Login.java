@@ -13,26 +13,32 @@ public class Login {
     private boolean activated=false;
     private String user;
     private String password;
+    private String token;
+    private int line;
+    private int column;
     
-    public Login(){
+    public Login(String token, int line, int column){
         activated = true;
+        this.token = token;
+        this.line = line;
+        this.column = column;
     }
     public void closeLogin(){
         activated=false;
     }
-    public void getUser(String user){
+    public boolean getUser(String user){
         if(activated=true){
             this.user = user;
+            return true;
         }
+        return false;
     }
-    public void getPassword(String password){
+    public boolean getPassword(String password){
         if(activated=true){
             this.password = password;
-            print("Se agrego el usuario "+user+" al login, con contrasena: "+password);
+            return true;
         }
-    }
-    public void print(String message){
-        System.out.println("MESSAGE: "+message);
+        return false;
     }
     
 }

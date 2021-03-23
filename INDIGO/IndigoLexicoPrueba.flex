@@ -10,6 +10,7 @@
 %column
 %public
 
+
 %{
 	StringBuffer string = new StringBuffer();
 %}
@@ -23,22 +24,23 @@ NumbersIntegral = [0-9]+
 /* Options */
 OptionsRequired = "SI"|"NO"
 AlignmentComponent = "CENTRO"|"IZQUIERDO"|"DERECHA"|"JUSTIFICAR"
+IniSolicitud = \![i|I][n|N][i|I]_[s|S][o|O][l|L][i|I][c|C][i|I][t|T][u|U][d|D]
+IniSolicitudes = \![i|I][n|N][i|I]_[s|S][o|O][l|L][i|I][c|C][i|I][t|T][u|U][d|D][e|E][s|S]
 
 %state STRING
-
 %%
 
 //Grammars
 
 	/* keywords */
-	<YYINITIAL> "!ini_solicitudes"		{System.out.println("Token: !ini_solicitudes");
-						}
+	
 	<YYINITIAL> "!fin_solicitudes"		{System.out.println("Token: !fin_solicitudes");
 						}
-	
-	<YYINITIAL> "!ini_solicitud"		{System.out.println("Token: !ini_solicitud ");
+	<YYINITIAL> {IniSolicitud}			{System.out.println("Token: !ini_solicitud ");
 						}
-	<YYINITIAL> "fin_solicitud!"		{System.out.println("Token: fin_solicitud! ");
+	<YYINITIAL> {IniSolicitudes}		{System.out.println("Token: !ini_solicitudes");
+				}
+	<YYINITIAL> "fin_solicitud!"			{System.out.println("Token: fin_solicitud! ");
 						}
 	<YYINITIAL> "\"CREDENCIALES_USUARIO\"" 	{System.out.println("Token: CREDENCIALES_USUARIO");
 						}

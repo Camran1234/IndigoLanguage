@@ -2,6 +2,8 @@ package com.mycompany.indigo;
 import java_cup.runtime.*;
 import static com.mycompany.indigo.symIndigo.*;
 import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
+import com.mycompany.handlers.ErrorCommands;
+import com.mycompany.formats.Error;
 %%
 
 %class IndigoLex
@@ -13,20 +15,19 @@ import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 
 %{
 	StringBuffer string = new StringBuffer();
+	ErrorCommands errorCommands= new ErrorCommands(true);
 %}
 
 /* Regular Expressions */
     LineTerminator = \r|\n|\r\n
     WhiteSpace     = {LineTerminator} | [ \t\f]
-	IniSolicitudes = ![i|I][n|N][i|I]_[s|S][o|O][l|L][i|I][s|S][i|I][t|T][u|U][d|D][e|E][s|S]
-	IniSolicitud = ![i|I][n|N][i|I]_[s|S][o|O][l|L][i|I][s|S][i|I][t|T][u|U][d|D]
-	FinSolicitudes = ![f|F][i|I][n|N]_[s|S][o|O][l|L][i|I][s|S][i|I][t|T][u|U][d|D][e|E][s|S]
-	FinSolicitud = ![f|F][i|I][n|N]_[s|S][o|O][l|L][i|I][s|S][i|I][t|T][u|U][d|D]
 /*Integer Numbers*/
-NumbersIntegral = \"[0-9]+\"
+//NumbersIntegral = \"[0-9]+\"
 /* Options */
 OptionsRequired = "\"SI\""|"\"NO\""
 AlignmentComponent = "\"CENTRO\""|"\"IZQUIERDO\""|"\"DERECHA\""|"\"JUSTIFICAR\""
+IniSolicitud = \![i|I][n|N][i|I]_[s|S][o|O][l|L][i|I][c|C][i|I][t|T][u|U][d|D]
+IniSolicitudes = \![i|I][n|N][i|I]_[s|S][o|O][l|L][i|I][c|C][i|I][t|T][u|U][d|D][e|E][s|S]
 
 %state STRING
 
@@ -37,12 +38,12 @@ AlignmentComponent = "\"CENTRO\""|"\"IZQUIERDO\""|"\"DERECHA\""|"\"JUSTIFICAR\""
 	/* keywords */
 	<YYINITIAL> {IniSolicitudes}		{System.out.println("Token: !ini_solicitudes");
 						return new Symbol(START, yyline + 1, yycolumn + 1, yytext());}
-	<YYINITIAL> {FinSolicitudes}		{System.out.println("Token: !fin_solicitudes");
+	<YYINITIAL> "!fin_solicitudes"		{System.out.println("Token: !fin_solicitudes");
 						return new Symbol(FINAL, yyline + 1, yycolumn + 1, yytext());}
 	
 	<YYINITIAL> {IniSolicitud}		{System.out.println("Token: !ini_solicitud ");
 						 return new Symbol(APERTURE, yyline + 1, yycolumn + 1, yytext());}
-	<YYINITIAL> {FinSolicitud}		{System.out.println("Token: fin_solicitud! ");
+	<YYINITIAL> "fin_solicitud!"		{System.out.println("Token: fin_solicitud! ");
 						 return new Symbol(END, yyline + 1, yycolumn + 1, yytext());}
 	<YYINITIAL> "\"CREDENCIALES_USUARIO\"" 	{System.out.println("Token: CREDENCIALES_USUARIO");
 						 return new Symbol(CREDENTIAL, yyline + 1, yycolumn + 1, yytext());}
@@ -136,8 +137,6 @@ AlignmentComponent = "\"CENTRO\""|"\"IZQUIERDO\""|"\"DERECHA\""|"\"JUSTIFICAR\""
 	<YYINITIAL> {
 		/* Literals */
 		/*See declaration space to acknowolage the meanings*/
-		{NumbersIntegral}	{System.out.println("Token: Number Integral "+yytext()); 
-					return new Symbol(NUMBER, yyline + 1, yycolumn + 1, yytext());}
 		{ AlignmentComponent }	{System.out.println("Token: AlineacionComponente: "+yytext()+"l");
 					return new Symbol(POSALIGNMENT, yyline + 1, yycolumn + 1, yytext());}
 		{ OptionsRequired }	{System.out.println("Token: Opcion Requerida: "+yytext()+"l");
@@ -182,4 +181,7 @@ AlignmentComponent = "\"CENTRO\""|"\"IZQUIERDO\""|"\"DERECHA\""|"\"JUSTIFICAR\""
 
 
 
-	[^]	{System.out.println("Error en el lexema: "+yytext());}
+	[^]	{System.out.println("Error en el lexema: "+yytext());
+		String errorMessage = "Lexema no reconocido ";
+		Error newError = new Error(errorMessage, yytext(), yyline+1, yycolumn+1);
+		errorCommands.addError(newError);}
