@@ -3,7 +3,7 @@ import java_cup.runtime.*;
 import static com.mycompany.indigo.symIndigo.*;
 import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 import com.mycompany.handlers.ErrorCommands;
-import com.mycompany.formats.Error;
+import com.mycompany.formats.ErrorIndigo;
 %%
 
 %class IndigoLex
@@ -49,6 +49,8 @@ IniSolicitudes = \![i|I][n|N][i|I]_[s|S][o|O][l|L][i|I][c|C][i|I][t|T][u|U][d|D]
 						 return new Symbol(CREDENTIAL, yyline + 1, yycolumn + 1, yytext());}
 	<YYINITIAL> "\"USUARIO\"" 			{System.out.println("Token: USUARIO");
 						 return new Symbol(USER, yyline + 1, yycolumn + 1, yytext());}
+	<YYINITIAL> "\"USUARIO_CREACION\"" 			{System.out.println("Token: USUARIO");
+						 return new Symbol(NEW_USER, yyline + 1, yycolumn + 1, yytext());}
 	<YYINITIAL> "\"PASSWORD\""		 	{System.out.println("Token: PASSWORD");
 						 return new Symbol(PASSWORD, yyline + 1, yycolumn + 1, yytext());}
 	<YYINITIAL> "\"FECHA_CREACION\""	 	{System.out.println("Token: FECHA_CREACION");
@@ -130,6 +132,8 @@ IniSolicitudes = \![i|I][n|N][i|I]_[s|S][o|O][l|L][i|I][c|C][i|I][t|T][u|U][d|D]
 						 return new Symbol(COLS, yyline + 1, yycolumn + 1, yytext());}
 	<YYINITIAL> "\"URL\""			{System.out.println("Token: URL");
 						 return new Symbol(URL, yyline + 1, yycolumn + 1, yytext());}
+						 <YYINITIAL> "\"INDEX\""			{System.out.println("Token: URL");
+						 return new Symbol(INDEX, yyline + 1, yycolumn + 1, yytext());}
 
 
 
@@ -183,5 +187,6 @@ IniSolicitudes = \![i|I][n|N][i|I]_[s|S][o|O][l|L][i|I][c|C][i|I][t|T][u|U][d|D]
 
 	[^]	{System.out.println("Error en el lexema: "+yytext());
 		String errorMessage = "Lexema no reconocido ";
-		Error newError = new Error(errorMessage, yytext(), yyline+1, yycolumn+1);
-		errorCommands.addError(newError);}
+		ErrorIndigo newError = new ErrorIndigo(errorMessage, yytext(), yyline+1, yycolumn+1);
+		errorCommands.addError(newError);
+		return new Symbol(DUNO,yyline+1, yycolumn+1,string.toString());}
