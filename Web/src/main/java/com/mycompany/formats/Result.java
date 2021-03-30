@@ -27,6 +27,13 @@ public class Result {
         this.column = column;
     }
     
+    public Result(String idForm, String nameCamp, String user, String result){
+        this.nameCamp = nameCamp;
+        this.idForm = idForm;
+        Answer answer = new Answer(user,result);
+        answers.add(answer);
+    }
+    
     public String getNameCamp() {
         return nameCamp;
     }
@@ -37,6 +44,16 @@ public class Result {
 
     public ArrayList<Answer> getAnswers() {
         return answers;
+    }
+    
+    /**
+     * Method to add a list of answers to the already existing
+     * @param moreAnswers 
+     */
+    public void addAnswers(ArrayList<Answer> moreAnswers){
+        for(Answer answer:moreAnswers){
+            answers.add(answer);
+        }
     }
 
     public void setNameCamp(String nameCamp) {

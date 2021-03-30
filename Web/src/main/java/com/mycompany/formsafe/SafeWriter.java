@@ -70,8 +70,19 @@ public class SafeWriter {
         Form form;
         Component component;
         Result result;
-        Answer answer;
         ArrayList<Component> aux = new ArrayList<>();
+        ArrayList<Form> auxiliarForms = new ArrayList<>();
+        ArrayList<Component> auxiliarComponents = new ArrayList<>();
+        //We change the position of the list forms
+        for(int index=forms.size()-1; index>=0; index--){
+            auxiliarForms.add(forms.get(index));
+        }
+        //We change the position of the list components
+        for(int index=components.size()-1; index>=0; index--){
+            auxiliarComponents.add(components.get(index));
+        }
+        forms = auxiliarForms;
+        components = auxiliarComponents;
         try(FileOutputStream outputStream = new FileOutputStream(relativePathForm)){
                 writeString(outputStream, "db.formularios (\n");
             for(int indexUser=0; indexUser<forms.size(); indexUser++){
@@ -98,7 +109,7 @@ public class SafeWriter {
                 
                 //OPEN STRUCT COMPONENTS
                 writeString(outputStream, "\t\t\"ESTRUCTURA\" : ( \n");
-                for(int indexComponent=0; indexComponent<aux.size(); indexComponent++){
+                for(int indexComponent=0; indexComponent<components.size(); indexComponent++){
                     component = aux.get(indexComponent);
                     if(indexComponent>0){
                         writeString(outputStream, ", \n");
@@ -148,18 +159,23 @@ public class SafeWriter {
                 
                 for(int indexResult=0; indexResult<results.size(); indexResult++){
                     result = results.get(indexResult);
-                    if(indexResult>0){
-                        writeString(outputStream, ",\n");
+                    if(result!=null){
+                        System.out.println("RESULT: "+result.getIdForm());
+                        System.out.println("FORM: "+form.getId());
+                        if(result.getIdForm().equals(form.getId())){
+                            if(indexResult>0){
+                                writeString(outputStream, ",\n");
+                            }
+                            writeString(outputStream, "\t\t\t{\n");
+                            writeString(outputStream, "\t\t\t\"NOMBRE_CAMPO\" : \""+result.getNameCamp()+"\" ,\n");
+                            writeString(outputStream, "\t\t\t\"ID_FORMULARIO\" : \""+result.getIdForm()+"\" ");                           
+                            ArrayList<Answer> answers = result.getAnswers();
+                            for(Answer answer:answers){
+                                writeString(outputStream, ",\n\t\t\t\""+answer.getIdUser()+"\" : \""+answer.getResult()+"\" \n");
+                            }
+                            writeString(outputStream, "\t\t\t}");
+                        }
                     }
-                    writeString(outputStream, "\t\t\t{\n");
-                    writeString(outputStream, "\t\t\t\"NOMBRE_CAMPO\" : \""+result.getNameCamp()+"\" ,\n");
-                    writeString(outputStream, "\t\t\t\"ID_FORMULARIO\" : \""+result.getNameCamp()+"\" ");
-                    
-                    for(int indexAnswer=0; indexAnswer<result.getAnswers().size(); indexAnswer++){
-                        answer = result.getAnswers().get(indexAnswer);
-                        writeString(outputStream, ",\n\t\t\t\""+answer.getIdUser()+"\" : \""+answer.getResult()+"\" \n");
-                    }
-                    writeString(outputStream, "\t\t\t}");
                 }
                 
                 writeString(outputStream, "\n\t\t)\n");

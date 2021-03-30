@@ -6,6 +6,7 @@
 package com.mycompany.formats;
 
 import com.mycompany.handlers.ErrorCommands;
+import java.util.ArrayList;
 
 /**
  *
@@ -252,6 +253,22 @@ public class Component implements ErrorHandler{
             }
             this.addSemanticError(new ErrorIndigo(errorMessage, token, line, column));
         }
+    }
+    
+    /**
+     * Get as an arrayList the options
+     * @return 
+     */
+    public ArrayList<String> getOptionsAsList(){
+        ArrayList<String> optionsList = new ArrayList<>();
+        if(options!=null){
+            String[] newList = options.split("\\|");
+            for(int index=0; index<newList.length; index++){
+                optionsList.add(newList[index]);
+                System.out.println(newList[index]);
+            }
+        }
+        return optionsList;
     }
     
     @Override

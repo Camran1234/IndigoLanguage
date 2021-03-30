@@ -4,7 +4,14 @@
     Author     : camran1234
 --%>
 
+<%@page import="javax.swing.JOptionPane"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<% 
+    session.removeAttribute("user");
+    session.removeAttribute("login");
+    String answer = (String)session.getAttribute("answer");
+    session.removeAttribute("answer");
+    %>
 <style>
     body {
         background-image: url("./Resources/fondo.jpg");
@@ -41,49 +48,54 @@
         color: white;
     }
     #componentA{align-content: center;}
-    
-    
+    #nav1{  
+        opacity: 0.8;     
+    }
+    #text{
+        font-size: 40px
+    }
+    #textError{
+        font-family: Verdana;
+        font-size: 25px;
+        color: red;
+    }
     
 </style>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="Pragma" content="no-cache">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
         <title>Menu Indigo</title>
     </head>
-    <body>
+    <body onunload="">
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id='nav1'>
-            <a class="navbar-brand" href="./index.jsp" id='textImage'><img src ="./Resources/flag.png" height="100" width="100"   />Servidor Indigo</a>
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="./index.jsp" id='text'>Inicio</a>
-            </li>
-        <!-- <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">            Dropdown on Right</a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action with a lot of text inside of an item</a>
-          </div>
-        </li>
-           -->
-            </ul>
+            <a class="navbar-brand" href="#" id='text'><img src ="./Resources/flag.png" height="100" width="100"   />Servidor Indigo</a>
         </nav>
         <br><br><br><br>
-        
-                <div class="container">
-                <div class="row justify-content-center">
-                    <div class="form-group col-md-4 col-md-offset-4 align-center ">
-                            <label id="formsText">Acceder Sesión</label><br>
-                            <span></span>
-                            <label id="TittleText">Usuario</label>
-                            <input type="text" name = "Codigo" placeholder="Ingrese su codigo de usuario" size="50%" class="form-control" required/>
-                            <label id="TittleText">Contraseña</label>
-                            <input type="password" name = "Password" placeholder="Ingrese su contraseña" size="50%" class="form-control" required/><br>
-                            <input id="componentA"type="submit"  class="ButtonOptions"  value="Iniciar Sesión" >
-                    </div>
+         
+        <form method="post" action="./LoginServer">
+            <div class="container">
+                <div class="row justify-content-center">                    
+                    <div class="form-group col-md-4 col-md-offset-4 align-center ">                
+                        <label id="formsText">Acceder Sesión</label><br>                    
+                        <span></span>                    
+                        <label id="TittleText">Usuario</label>                    
+                        <input type="text" name = "user" placeholder="Ingrese su codigo de usuario" size="50%" class="form-control" required/>                    
+                        <label id="TittleText">Contraseña</label>                    
+                        <input type="password" name = "password" placeholder="Ingrese su contraseña" size="50%" class="form-control" required/><br>                   
+                        <input id="componentA"type="submit"  class="ButtonOptions"  value="Iniciar Sesión" >                    
+                        <%
+                            if(answer!=null){
+                            %>
+                            <label id="textError"><%=answer%></label>
+                        <%
+                            }
+                            %>
+                    </div>    
                 </div> 
-        </div>
+            </div>
+        </form>
             
         
         

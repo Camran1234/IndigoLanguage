@@ -22,7 +22,7 @@ LineTerminator = \r|\n|\r\n
 WhiteSpace     = {LineTerminator} | [ \t\f]
 Number = [0-9];
 OptionsRequired = "\"SI\""|"\"NO\""
-AlignmentComponent = "\"CENTRO\""|"\"IZQUIERDO\""|"\"DERECHA\""|"\"JUSTIFICAR\""
+AlignmentComponent = "\"CENTRO\""|"\"IZQUIERDA\""|"\"DERECHA\""|"\"JUSTIFICAR\""
 %state STRING
 
 %%

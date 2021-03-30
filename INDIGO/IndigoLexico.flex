@@ -25,7 +25,7 @@ import com.mycompany.formats.ErrorIndigo;
 //NumbersIntegral = \"[0-9]+\"
 /* Options */
 OptionsRequired = "\"SI\""|"\"NO\""
-AlignmentComponent = "\"CENTRO\""|"\"IZQUIERDO\""|"\"DERECHA\""|"\"JUSTIFICAR\""
+AlignmentComponent = "\"CENTRO\""|"\"IZQUIERDA\""|"\"DERECHA\""|"\"JUSTIFICAR\""
 IniSolicitud = \![i|I][n|N][i|I]_[s|S][o|O][l|L][i|I][c|C][i|I][t|T][u|U][d|D]
 IniSolicitudes = \![i|I][n|N][i|I]_[s|S][o|O][l|L][i|I][c|C][i|I][t|T][u|U][d|D][e|E][s|S]
 

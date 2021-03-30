@@ -44,6 +44,16 @@ public class Form implements ErrorHandler{
         this.column = column;
     }
     
+    public String createFormMessage(){
+        String form = "FORMULARIO ID:"+id+", TITULO:"+tittle+", NOMBRE: "+name;
+        return form;
+    }
+    
+    public String createExampleUri(){
+        String form="./form.jsp?formId="+id;
+        return form;
+    }
+    
     /**
      * Close the entry of data of this object
      */

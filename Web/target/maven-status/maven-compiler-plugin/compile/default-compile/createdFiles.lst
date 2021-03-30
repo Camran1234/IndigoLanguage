@@ -1,3 +1,4 @@
+Servlets/uploadData.class
 com/mycompany/formats/ErrorIndigo.class
 com/mycompany/indigo/IndigoSyntax.class
 com/mycompany/formsafe/symSqForm.class
@@ -9,6 +10,9 @@ com/mycompany/formats/Component.class
 com/mycompany/formats/Login.class
 com/mycompany/handlers/FormCommands.class
 WebSocket/dBIndigo.class
+Servlets/LoginServer.class
+Servlets/LogOutServer.class
+Servlets/FormGenerator.class
 com/mycompany/indigo/Analysis.class
 com/mycompany/indigo/symIndigo.class
 com/mycompany/handlers/ErrorCommands.class

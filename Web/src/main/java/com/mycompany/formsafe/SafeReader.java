@@ -103,6 +103,7 @@ public class SafeReader {
                 components = null;
             }else{
                 forms = formCommands.toArrayList();
+                
                 components = componentCommands.getNewComponents();
                 if(resultCommands!=null){
                     this.resultCommands = resultCommands;

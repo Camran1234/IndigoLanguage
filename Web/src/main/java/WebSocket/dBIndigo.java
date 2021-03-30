@@ -32,8 +32,49 @@ public class dBIndigo {
     ArrayList<Component> components = new ArrayList<>();
     private SafeReader safeReader = new SafeReader();
     
+    
+    
+    
     public dBIndigo(PrintWriter out){
         setExistingParameters(out);
+    }
+    
+    public ArrayList<Form> getForms(){
+        if(forms!=null){
+            return forms;
+        }else{
+            return null;
+        }
+    }
+    
+    /**
+     * Return a list of forms of a specify user
+     * @param user
+     * @return 
+     */
+    public ArrayList<Form> collectForms(String user){
+        ArrayList<Form> aux = new ArrayList<>();
+        for(Form form:forms){
+            if(form.getUserCreator().equals(user)){
+                aux.add(form);
+            }
+        }
+        return aux;
+        
+    }
+    /**
+     * Return the components of a specify form
+     * @param user
+     * @return 
+     */
+    public ArrayList<Component> collectComponents(String formId){
+        ArrayList<Component> aux = new ArrayList<>();
+        for(Component component:components){
+            if(component.getFormName().equals(formId)){
+                aux.add(component);
+            }
+        }
+        return aux;
     }
     
     /**
@@ -72,6 +113,20 @@ public class dBIndigo {
         }
     }
     
+    /**
+     * Sign up for online, only return true or false
+     * @param user
+     * @param password
+     * @return 
+     */
+    public boolean singUpOnline(String user, String password){
+        for(User user1:users){
+            if(user1.getUser().equals(user) && user1.getPassword().equals(password)){
+                return true;
+            }
+        }
+        return false;
+    }
     
     /**
      * Try to signUp
@@ -346,13 +401,27 @@ public class dBIndigo {
             }else{
                 results = new ArrayList<>();
             }
+            boolean addRepeated=false;
             if(newResults!=null){
                 for(Result addResult:newResults){
-                    results.add(addResult);
+                    addRepeated=false;
+                    for(Result result:results){
+                        if(addResult.getIdForm().equalsIgnoreCase(result.getIdForm()) && addResult.getNameCamp().equalsIgnoreCase(result.getNameCamp())){
+                            addRepeated=true;
+                            result.addAnswers(addResult.getAnswers());
+                            break;
+                        }
+                    }
+                    if(!addRepeated){
+                        results.add(addResult);
+                    }
                 }
             }
+            System.out.println("Actualizando datos");
             if(!safeReader.haveErrors()){
-                safeWriter.WriteForm(forms,components, results);
+                if(forms!=null || components!=null || results!=null){            
+                    safeWriter.WriteForm(forms,components, results);    
+                }
             }
         } catch (Exception e) {
             System.out.println("Error en dbIndigo, uploadNewDate: "+e.getMessage());

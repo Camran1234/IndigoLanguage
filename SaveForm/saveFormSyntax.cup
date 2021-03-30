@@ -228,5 +228,8 @@ newdata_param ::= CLOSE_CURLY COMA data_param {:Symbol sym = cur_token;
                                                                         int row = sym.left;
                                                                         int column = sym.right;
                                                                         resultCommands.newResult(String.valueOf(sym.value),row,column);:}
-                    | CLOSE_CURLY;
+                    | CLOSE_CURLY {:Symbol sym = cur_token;
+                                                                        int row = sym.left;
+                                                                        int column = sym.right;
+                                                                        resultCommands.newResult(String.valueOf(sym.value),row,column);:};
 /* END DATOS_RECOPILADOS */

@@ -17,6 +17,7 @@ public class Answer {
         this.idUser = user;
         this.result = result;
     }
+    
 
     public String getIdUser() {
         return idUser;

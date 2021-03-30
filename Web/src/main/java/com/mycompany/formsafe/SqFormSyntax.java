@@ -1353,7 +1353,10 @@ class CUP$SqFormSyntax$actions {
           case 86: // newdata_param ::= CLOSE_CURLY 
             {
               Object RESULT =null;
-
+		Symbol sym = cur_token;
+                                                                        int row = sym.left;
+                                                                        int column = sym.right;
+                                                                        resultCommands.newResult(String.valueOf(sym.value),row,column);
               CUP$SqFormSyntax$result = parser.getSymbolFactory().newSymbol("newdata_param",16, ((java_cup.runtime.Symbol)CUP$SqFormSyntax$stack.peek()), ((java_cup.runtime.Symbol)CUP$SqFormSyntax$stack.peek()), RESULT);
             }
           return CUP$SqFormSyntax$result;
