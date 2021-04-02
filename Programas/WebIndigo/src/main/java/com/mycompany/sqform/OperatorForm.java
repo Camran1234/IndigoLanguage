@@ -136,29 +136,22 @@ public class OperatorForm {
     }
     
     
-    
+    /**
+     * Method to get the comparations forms
+     * @param resultPrint
+     * @param consult
+     * @param results
+     * @param components
+     * @param names 
+     */
     private void addRows(PrintResult resultPrint, Consult consult, ArrayList<Result> results, ArrayList<Component> components, ArrayList<String> names){
-        ArrayList<Comparation> newComparations = new ArrayList<Comparation>();
         LogicParser logicParser = new LogicParser();
         if(consult.getComparations().size()==0){
             System.out.println("Comparaciones son 0");
             logicParser.setAllResults(results,names);
         }else{
             System.out.println("Comparaciones no son 0");
-            for(Comparation comparation:consult.getComparations()){        
-                if(comparation.getLogicOperator()!=null){
-                    System.out.println("Tiene operador Logico");
-                 if(comparation.getLogicOperator().equalsIgnoreCase("OR")){
-                        logicParser.stablishRows(resultPrint, results, newComparations, components, names);
-                        newComparations = new ArrayList<>();
-                    }
-                    newComparations.add(comparation);
-                }else{                    
-                    System.out.println("No tiene operador logico");
-                    newComparations.add(comparation);
-                    logicParser.stablishRows(resultPrint, results, newComparations, components, names);
-                }
-            }
+            logicParser.stablishRows( results, consult.getComparations(), components, names, block);
         }
         resultPrint.setRowList(logicParser.finalResult());
     }

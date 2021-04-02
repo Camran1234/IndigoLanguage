@@ -14,13 +14,19 @@ import java.util.ArrayList;
  */
 public class Chunk {
     private ArrayList<ArrayList<Answer>> answers = new ArrayList<>();
+    private String operator="";
+    private String symbol="";
+    private String camp="";
     
-    public Chunk(ArrayList<ArrayList<Answer>> note){
+    public Chunk(ArrayList<ArrayList<Answer>> note, String operator, String symbol, String camp){
         if(note.size()!=0){
             this.answers = note;
         System.out.println("New Chunk");
         System.out.println("Size chunk: "+note.size());
         System.out.println("Answers Size"+note.get(0).size());
+        this.operator = operator;
+        this.symbol = symbol;
+        this.camp = camp;
         }
     }
     

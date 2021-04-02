@@ -140,11 +140,13 @@
         </nav>
         <h3><%=form.getTittle()%></h5>
         <h5><%=form.getName()%></h4>
-        
+                            
         <form method="post" action="../uploadData" enctype="multipart/form-data">
             <input type="hidden" name="data#######" value=<%=formId%>>
             <div id='viewNice' class="card bg-light mb-3" style="max-width: 40rem;">
-                    <%for(Component component:components) {
+                    <%
+                        boolean button=false;
+                        for(Component component:components) {
                         String align="left";
                         String required = "";
                         
@@ -239,10 +241,9 @@
                             <%
                         }else if(component.getClassName().equalsIgnoreCase("BOTON")){
                             if(form.getUserCreator().equalsIgnoreCase(actualUser)){
+                            button=true;
                             %> 
-                            <div style="text-align:<%=align%>">
-                            <button onclick="copyLink()" class="btn btn-outline-dark">Copiar Link</button>
-                            </div>
+                            
                             <%
                             }else{
                             %>
@@ -260,6 +261,9 @@
                     }%>
             </div>
         </form>
+            <%if(button){%>
+            <button onclick="copyLink()" class="btn btn-outline-dark">Copiar Link</button>
+            <%}%>
         <%}else{%>
         <h5>ERROR 404 FORMULARIO NO ENCONTRADO</h5>
         <%}%>

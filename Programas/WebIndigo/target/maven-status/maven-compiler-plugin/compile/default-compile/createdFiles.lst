@@ -5,6 +5,7 @@ WebSocket/sqlPetition.class
 com/mycompany/sqform/LogicParser.class
 com/mycompany/formats/User.class
 com/mycompany/formats/Component.class
+com/mycompany/sqform/HelpState.class
 com/mycompany/formats/Parameter.class
 com/mycompany/sqform/PackageResult.class
 Servlets/LogOutServer.class

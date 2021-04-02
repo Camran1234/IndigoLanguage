@@ -5,6 +5,7 @@
  */
 package com.mycompany.formats;
 
+import com.mycompany.sqform.HelpState;
 import java.util.ArrayList;
 
 /**
@@ -54,6 +55,12 @@ public class Result {
         return false;
     }
     
+    /**
+     * Function to verify if the camp or id is equal to a component
+     * @param compare
+     * @param components
+     * @return 
+     */
     public boolean isEqualCampNorId(String compare, ArrayList<Component> components){
         for(Component component:components){
             if(compare.equals(component.getCampName()) || compare.equals(component.getId())){
@@ -77,12 +84,14 @@ public class Result {
      * @param symbol
      * @return 
      */
-    public ArrayList<Integer> doOperation(String operator, String symbol, String logicOperator){
-        ArrayList<Integer> positions = new ArrayList<>();
+    public void doOperation(String operator, String symbol, String logicOperator, ArrayList<HelpState> rowNumbers, ArrayList<Parameter> parameters){
+        
         if(logicOperator==null){
             logicOperator="";
         }
-        for(Answer answer:answers){
+        
+        for(int indexAnswer=0; indexAnswer<answers.size(); indexAnswer++){
+            Answer answer = answers.get(indexAnswer);
             String result = answer.getResult();
             //Operate as numbers
             if(isNumber(result) && isNumber(symbol)){
@@ -91,68 +100,108 @@ public class Result {
                 switch(operator){
                     case ">=":
                         if(logicOperator.equalsIgnoreCase("NOT")){
-                            if(resultNumber <= symbolNumber){
-                                positions.add(Integer.valueOf(answers.indexOf(answer)));
-                            }
-                        }else{
                             if(resultNumber >= symbolNumber){
-                                positions.add(Integer.valueOf(answers.indexOf(answer)));
+                                rowNumbers.get(indexAnswer).setState(false);
+                            }else{
+                                rowNumbers.get(indexAnswer).setState(true);
+                            }
+                        }else if(logicOperator.equalsIgnoreCase("AND")){
+                            if(resultNumber >= symbolNumber){
+                                rowNumbers.get(indexAnswer).setState(true);
+                            }else{
+                                rowNumbers.get(indexAnswer).setState(false);
+                            }
+                        }else if(logicOperator.equalsIgnoreCase("OR") || logicOperator.equalsIgnoreCase("")){
+                            if(resultNumber >= symbolNumber){
+                                rowNumbers.get(indexAnswer).setState(true);
                             }
                         }
                         break;
                     case "<=":
                         if(logicOperator.equalsIgnoreCase("NOT")){
-                            if(resultNumber >= symbolNumber){
-                                positions.add(Integer.valueOf(answers.indexOf(answer)));
-                            }
-                        }else{
                             if(resultNumber <= symbolNumber){
-                                positions.add(Integer.valueOf(answers.indexOf(answer)));
+                                rowNumbers.get(indexAnswer).setState(false);
+                            }else{
+                                rowNumbers.get(indexAnswer).setState(true);
+                            }
+                        }else if(logicOperator.equalsIgnoreCase("AND")){
+                            if(resultNumber <= symbolNumber){
+                                rowNumbers.get(indexAnswer).setState(true);
+                            }else{
+                                rowNumbers.get(indexAnswer).setState(false);
+                            }
+                        }else if(logicOperator.equalsIgnoreCase("OR") || logicOperator.equalsIgnoreCase("")){
+                            if(resultNumber <= symbolNumber){
+                                rowNumbers.get(indexAnswer).setState(true);
                             }
                         }
                         break;
                     case ">":
                         if(logicOperator.equalsIgnoreCase("NOT")){
-                            if(resultNumber < symbolNumber){
-                                positions.add(Integer.valueOf(answers.indexOf(answer)));
-                            }
-                        }else{
                             if(resultNumber > symbolNumber){
-                                positions.add(Integer.valueOf(answers.indexOf(answer)));
+                                rowNumbers.get(indexAnswer).setState(false);
+                            }else{
+                                rowNumbers.get(indexAnswer).setState(true);
+                            }
+                        }else if(logicOperator.equalsIgnoreCase("AND")){
+                            if(resultNumber > symbolNumber){
+                                rowNumbers.get(indexAnswer).setState(true);
+                            }else{
+                                rowNumbers.get(indexAnswer).setState(false);
+                            }
+                        }else if(logicOperator.equalsIgnoreCase("OR") || logicOperator.equalsIgnoreCase("")){
+                            if(resultNumber > symbolNumber){
+                                rowNumbers.get(indexAnswer).setState(true);
                             }
                         }
                         break;
                     case "<":
                         if(logicOperator.equalsIgnoreCase("NOT")){
-                            if(resultNumber > symbolNumber){
-                                positions.add(Integer.valueOf(answers.indexOf(answer)));
-                            }
-                        }else{
                             if(resultNumber < symbolNumber){
-                                positions.add(Integer.valueOf(answers.indexOf(answer)));
+                                rowNumbers.get(indexAnswer).setState(false);
+                            }else{
+                                rowNumbers.get(indexAnswer).setState(true);
+                            }
+                        }else if(logicOperator.equalsIgnoreCase("AND")){
+                            if(resultNumber < symbolNumber){
+                                rowNumbers.get(indexAnswer).setState(true);
+                            }else{
+                                rowNumbers.get(indexAnswer).setState(false);
+                            }
+                        }else if(logicOperator.equalsIgnoreCase("OR") || logicOperator.equalsIgnoreCase("")){
+                            if(resultNumber < symbolNumber){
+                                rowNumbers.get(indexAnswer).setState(true);
                             }
                         }
                         //Here
                         break;
                     case "=":
                         if(logicOperator.equalsIgnoreCase("NOT")){
-                            if(resultNumber != symbolNumber){
-                                positions.add(Integer.valueOf(answers.indexOf(answer)));
-                            }
-                        }else{
                             if(resultNumber == symbolNumber){
-                                positions.add(Integer.valueOf(answers.indexOf(answer)));
+                                rowNumbers.get(indexAnswer).setState(false);
+                            }
+                        }else if(logicOperator.equalsIgnoreCase("AND")){
+                            if(resultNumber == symbolNumber){
+                                rowNumbers.get(indexAnswer).setState(true);
+                            }
+                        }else if(logicOperator.equalsIgnoreCase("OR") || logicOperator.equalsIgnoreCase("")){
+                            if(resultNumber == symbolNumber){
+                                rowNumbers.get(indexAnswer).setState(true);
                             }
                         }
                         break;
                     case "!=":
                         if(logicOperator.equalsIgnoreCase("NOT")){
-                            if(resultNumber == symbolNumber){
-                                positions.add(Integer.valueOf(answers.indexOf(answer)));
-                            }
-                        }else{
                             if(resultNumber != symbolNumber){
-                                positions.add(Integer.valueOf(answers.indexOf(answer)));
+                                rowNumbers.get(indexAnswer).setState(false);
+                            }
+                        }else if(logicOperator.equalsIgnoreCase("AND")){
+                            if(resultNumber != symbolNumber){
+                                rowNumbers.get(indexAnswer).setState(true);
+                            }
+                        }else if(logicOperator.equalsIgnoreCase("OR") || logicOperator.equalsIgnoreCase("")){
+                            if(resultNumber != symbolNumber){
+                                rowNumbers.get(indexAnswer).setState(true);
                             }
                         }
                         break;
@@ -162,34 +211,41 @@ public class Result {
                     case "=":
                     //Apply for String
                         if(logicOperator.equalsIgnoreCase("NOT")){
-                            if(!result.equalsIgnoreCase(operator)){
-                                positions.add(Integer.valueOf(answers.indexOf(answer)));
-                            }
-                        }else{
                             if(result.equalsIgnoreCase(symbol)){
-                                System.out.println("Result: "+result + " SYmbolo: "+symbol+"Numero: "+answers.indexOf(answer));
-                                positions.add(Integer.valueOf(answers.indexOf(answer)));
+                                rowNumbers.get(indexAnswer).setState(false);
+                            }
+                        }else if(logicOperator.equalsIgnoreCase("AND")){
+                            if(result.equalsIgnoreCase(symbol)){
+                                rowNumbers.get(indexAnswer).setState(true);
+                            }
+                        }else if(logicOperator.equalsIgnoreCase("OR") || logicOperator.equalsIgnoreCase("")){
+                            if(result.equalsIgnoreCase(symbol)){
+                                rowNumbers.get(indexAnswer).setState(true);
                             }
                         }
                         break;
                     case "!=":
                     //Apply for Strings
                         if(logicOperator.equalsIgnoreCase("NOT")){
-                            if(result.equalsIgnoreCase(operator)){
-                                positions.add(Integer.valueOf(answers.indexOf(answer)));
-                            }
-                        }else{
                             if(!result.equalsIgnoreCase(symbol)){
-                                positions.add(Integer.valueOf(answers.indexOf(answer)));
+                                rowNumbers.get(indexAnswer).setState(false);
+                            }
+                        }else if(logicOperator.equalsIgnoreCase("AND")){
+                            if(!result.equalsIgnoreCase(symbol)){
+                                rowNumbers.get(indexAnswer).setState(true);
+                            }
+                        }else if(logicOperator.equalsIgnoreCase("OR") || logicOperator.equalsIgnoreCase("")){
+                            if(!result.equalsIgnoreCase(symbol)){
+                                rowNumbers.get(indexAnswer).setState(true);
                             }
                         }
                         break;
                 }
             }else{
                 System.out.println("They are not the same types");
+                parameters.add(new Parameter("Error","No se pudo realizar la comparacion cerca de: "+logicOperator+" "+operator+" "+symbol+", no son del mismo tipo"));
             }
         }
-        return positions;
     }
     
     /**
