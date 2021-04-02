@@ -45,9 +45,9 @@ public class LogicParser {
             }
         }
         //Getting the rows numbers
-        if(answers.size()>0){
-            if(answers.get(0).size()>0){
-                for(int indexRows=0; indexRows<answers.get(0).size(); indexRows++){
+        if(auxResults.size()>0){
+            if(auxResults.get(0).getAnswers().size()>0){
+                for(int indexRows=0; indexRows<auxResults.get(0).getAnswers().size(); indexRows++){
                     positionsRows.add(new HelpState(indexRows));
                 }
             }

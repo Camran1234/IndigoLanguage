@@ -170,8 +170,9 @@ public class SafeWriter {
                             data+=writeString(outputStream, "\t\t\t\"NOMBRE_CAMPO\" : \""+result.getNameCamp()+"\" ,\n");
                             data+=writeString(outputStream, "\t\t\t\"ID_FORMULARIO\" : \""+result.getIdForm()+"\" ");                           
                             ArrayList<Answer> answers = result.getAnswers();
-                            for(Answer answer:answers){
-                                data+=writeString(outputStream, ",\n\t\t\t\""+answer.getIdUser()+"\" : \""+answer.getResult()+"\" \n");
+                            for(int indexAnswer=0; indexAnswer<answers.size(); indexAnswer++){
+                                Answer answer = answers.get(indexAnswer);
+                                data+=writeString(outputStream, ", \n\t\t\t\""+answer.getIdUser()+"\" : \""+answer.getResult()+"\" \n");
                             }
                             data+=writeString(outputStream, "\t\t\t}");
                         }

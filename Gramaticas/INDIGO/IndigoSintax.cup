@@ -432,7 +432,7 @@ start with ip;
 		createc_component ::= 	ID COLON TEXTID:text createc_partiture {: addIdComponent(String.valueOf(text).replace("\"","")); :}
 					|NAME_C COLON TEXTWS:text createc_partiture {: addnCampName(String.valueOf(text).replace("\"","")); :}
 					|NAME_C COLON TEXTWIS:text createc_partiture {: addnCampName(String.valueOf(text).replace("\"","")); :}
-					|FORM COLON TEXTWIS:text createc_partiture {: addFormName(String.valueOf(text).replace("\"","")); :}
+					|FORM COLON TEXTID:text createc_partiture {: addFormName(String.valueOf(text).replace("\"","")); :}
 					|CLASS COLON classnames:CLASS createc_partiture {: addClassName(String.valueOf(CLASS).replace("\"","")); :}
 					|OPTIONS COLON TEXTWS:text createc_partiture {: addOptions(String.valueOf(text).replace("\"","")); :}
 					|OPTIONS COLON TEXTWIS:text createc_partiture {: addOptions(String.valueOf(text).replace("\"","")); :}	
@@ -447,14 +447,14 @@ start with ip;
 					|error createc_partiture;
 
 		deletec ::=	DELETE_C initc deletec_component;
-		deletec_component ::=	ID COLON TEXTID:text COMA FORM COLON TEXTWIS:texto close {: deleteComponent(String.valueOf(text).replace("\"",""), String.valueOf(texto));:}
+		deletec_component ::=	ID COLON TEXTID:text COMA FORM COLON TEXTID:texto close {: deleteComponent(String.valueOf(text).replace("\"",""), String.valueOf(texto));:}
 								|error close;
 
 		modifyc ::=	MODIFY_C initc	modifyc_component {: closeModifyComponent();:};
 		modifyc_component ::=ID COLON TEXTID:text modifyc_partiture {: addIdComponent(String.valueOf(text).replace("\"","")); :}
 					|NAME_C COLON TEXTWS:text modifyc_partiture {: addnCampName(String.valueOf(text).replace("\"","")); :}
 					|NAME_C COLON TEXTWIS:text modifyc_partiture {: addnCampName(String.valueOf(text).replace("\"","")); :}
-					|FORM COLON TEXTWIS:text modifyc_partiture {: addFormName(String.valueOf(text).replace("\"","")); :}
+					|FORM COLON TEXTID:text modifyc_partiture {: addFormName(String.valueOf(text).replace("\"","")); :}
 					|CLASS COLON classnames:CLASS modifyc_partiture {: addClassName(String.valueOf(CLASS).replace("\"","")); :}
 					|OPTIONS COLON TEXTWS:text modifyc_partiture {: addOptions(String.valueOf(text).replace("\"","")); :}
 					|OPTIONS COLON TEXTWIS:text modifyc_partiture {: addOptions(String.valueOf(text).replace("\"","")); :}

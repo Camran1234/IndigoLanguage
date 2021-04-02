@@ -188,7 +188,7 @@ public class IndigoSyntax extends java_cup.runtime.lr_parser {
     "\001\002\000\014\002\uff92\003\uff92\063\uff92\064\uff92\070" +
     "\uff92\001\002\000\004\062\175\001\002\000\010\003\127" +
     "\063\126\070\052\001\002\000\014\002\uff8b\003\uff8b\063" +
-    "\uff8b\064\uff8b\070\uff8b\001\002\000\004\060\200\001\002" +
+    "\uff8b\064\uff8b\070\uff8b\001\002\000\004\077\200\001\002" +
     "\000\010\003\127\063\126\070\052\001\002\000\014\002" +
     "\uff91\003\uff91\063\uff91\064\uff91\070\uff91\001\002\000\004" +
     "\061\203\001\002\000\010\003\127\063\126\070\052\001" +
@@ -266,7 +266,7 @@ public class IndigoSyntax extends java_cup.runtime.lr_parser {
     "\000\004\070\052\001\002\000\010\002\uff82\003\uff82\064" +
     "\uff82\001\002\000\004\077\351\001\002\000\004\063\352" +
     "\001\002\000\004\037\353\001\002\000\004\066\354\001" +
-    "\002\000\004\060\355\001\002\000\004\070\052\001\002" +
+    "\002\000\004\077\355\001\002\000\004\070\052\001\002" +
     "\000\010\002\uff83\003\uff83\064\uff83\001\002\000\006\003" +
     "\361\027\360\001\002\000\004\066\364\001\002\000\004" +
     "\070\052\001\002\000\010\002\uffb6\003\uffb6\064\uffb6\001" +
@@ -336,7 +336,7 @@ public class IndigoSyntax extends java_cup.runtime.lr_parser {
     "\001\002\000\010\002\uff73\003\uff73\064\uff73\001\002\000" +
     "\004\062\u0149\001\002\000\010\003\u0121\063\u0120\070\052" +
     "\001\002\000\010\002\uff77\003\uff77\064\uff77\001\002\000" +
-    "\004\060\u014c\001\002\000\010\003\u0121\063\u0120\070\052" +
+    "\004\077\u014c\001\002\000\010\003\u0121\063\u0120\070\052" +
     "\001\002\000\010\002\uff7d\003\uff7d\064\uff7d\001\002\000" +
     "\004\061\u014f\001\002\000\010\003\u0121\063\u0120\070\052" +
     "\001\002\000\010\002\uff76\003\uff76\064\uff76\001\002\000" +
@@ -1980,7 +1980,7 @@ class CUP$IndigoSyntax$actions {
           return CUP$IndigoSyntax$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 112: // createc_component ::= FORM COLON TEXTWIS createc_partiture 
+          case 112: // createc_component ::= FORM COLON TEXTID createc_partiture 
             {
               Object RESULT =null;
 		int textleft = ((java_cup.runtime.Symbol)CUP$IndigoSyntax$stack.elementAt(CUP$IndigoSyntax$top-1)).left;
@@ -2142,7 +2142,7 @@ class CUP$IndigoSyntax$actions {
           return CUP$IndigoSyntax$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 126: // deletec_component ::= ID COLON TEXTID COMA FORM COLON TEXTWIS close 
+          case 126: // deletec_component ::= ID COLON TEXTID COMA FORM COLON TEXTID close 
             {
               Object RESULT =null;
 		int textleft = ((java_cup.runtime.Symbol)CUP$IndigoSyntax$stack.elementAt(CUP$IndigoSyntax$top-5)).left;
@@ -2211,7 +2211,7 @@ class CUP$IndigoSyntax$actions {
           return CUP$IndigoSyntax$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 132: // modifyc_component ::= FORM COLON TEXTWIS modifyc_partiture 
+          case 132: // modifyc_component ::= FORM COLON TEXTID modifyc_partiture 
             {
               Object RESULT =null;
 		int textleft = ((java_cup.runtime.Symbol)CUP$IndigoSyntax$stack.elementAt(CUP$IndigoSyntax$top-1)).left;

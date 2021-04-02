@@ -35,6 +35,12 @@ public class Result {
         answers.add(answer);
     }
     
+    public void addMoreText(String texy){
+        String aux = answers.get(0).getResult();
+        texy += "|"+aux;
+        answers.get(0).setResult(texy);
+    }
+    
     public Answer getAnswer(int index){
         return answers.get(index);
     }

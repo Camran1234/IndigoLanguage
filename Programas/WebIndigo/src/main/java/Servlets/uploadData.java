@@ -46,7 +46,7 @@ public class uploadData extends HttpServlet {
         String formId = (String)request.getAttribute("data#######");
         String user = (String)request.getSession().getAttribute("user");
         dBIndigo db = new dBIndigo(response.getWriter());
-        
+                                ArrayList<String> names = new ArrayList<>();
         ArrayList<Component> components =db.collectComponents(formId);
         ArrayList<String> nameCamps = new ArrayList<>();
         ArrayList<String> nameClass = new ArrayList<>();
@@ -139,6 +139,7 @@ public class uploadData extends HttpServlet {
                         }
                         System.out.println("Nombre: "+nombreInput);
                         System.out.println("Valor: "+valorInput);
+
                         for(Component component:components){
                             System.out.println("1");
                             if(component.getCampName().equals(nombreInput)){
@@ -156,9 +157,21 @@ public class uploadData extends HttpServlet {
                                         results.add(result);
                                         break;
                                         case "CHECKBOX":
-                                            System.out.println("Agregando: "+component.getClassName());
-                                        result = new Result(formId, nombreInput, user, valorInput);
-                                        results.add(result);
+                                            if(names.size()>0){
+                                                System.out.println("YEAH");
+                                                for(int indexA=0; indexA<results.size(); indexA++){
+                                                    if(results.get(indexA).getNameCamp().equalsIgnoreCase(nombreInput)){
+                                                        results.get(indexA).addMoreText(valorInput);
+                                                    }
+                                                }
+                                            }else if(names.size()==0){
+                                                System.out.println("FALSE");
+                                                names.add(nombreInput);
+                                                System.out.println("Agregando: "+component.getClassName());
+                                                result = new Result(formId, nombreInput, user, valorInput);
+                                                results.add(result);
+                                            }
+                                            
                                         break;
                                         case "RADIO":
                                             System.out.println("Agregando: "+component.getClassName());

@@ -183,12 +183,12 @@
                         }else if(component.getClassName().equalsIgnoreCase("CHECKBOX")){
                             %>
                             <div  class="card-header"><%=component.getVisibleText()%> </div>
-                            <div style="text-align:<%=align%>">
+                            <div style="text-align:<%=align%>"  <%=required%>>
                             <%
                                 ArrayList<String> options = component.getOptionsAsList();
                                 for(String text:options){
                                     %>
-                                    <input type="checkbox" name="<%=component.getCampName()%>" value="text" <%=required%>><%=text%><br>
+                                    <input type="checkbox" name="<%=component.getCampName()%>" value="<%=text%>"><%=text%><br>
                                     <%
                                 }
                             %>            
@@ -202,7 +202,7 @@
                                 ArrayList<String> options = component.getOptionsAsList();
                                 for(String text:options){
                                     %>
-                                    <input  type="radio" name="<%=component.getCampName()%>" value="text" <%=required%>><%=text%> <br>
+                                    <input  type="radio" name="<%=component.getCampName()%>" value="<%=text%>" <%=required%>><%=text%> <br>
                                     <%
                                 }
                             %>  
