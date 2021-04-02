@@ -1,0 +1,104 @@
+package filemanager;
+import Parameter.*;
+import Parameter.ParameterHandler;
+import Parameter.TokenHandler;
+import java_cup.runtime.*;
+import java.util.ArrayList;
+import java_cup.runtime.XMLElement;
+
+parser code {:
+    ArrayList<ParameterHandler> handlers = new ArrayList<>();
+    ParameterHandler parameter = new ParameterHandler();    
+    ErrorCommands errorCommands = new ErrorCommands(false);
+
+    public ErrorCommands getErrorCommands(){
+        return errorCommands;
+    }
+
+    public ArrayList<ParameterHandler> getParametersHandlers(){
+        System.out.println("Size del handler"+handlers.size());
+        return handlers;
+    }
+    
+
+
+    @Override
+	public void syntax_error(Symbol symbol){
+    	report_expected_token_ids();
+	    int line = symbol.left;
+	    int column = symbol.right;
+	    String token = (String) cur_token.value;
+	    //We get the production
+            String errorArmado="";
+            TokenHandler tokenHandler = new TokenHandler();
+            for(int index=0; index<expected_token_ids().size() ; index++){
+                //We traduce the token to a form that the user might understand
+                errorArmado += tokenHandler.expectedFormIndigo(symbl_name_from_id(expected_token_ids().get(index))) + " o ";
+            }
+            String error = "Se esperaba la forma Sintactica: " + errorArmado;
+			errorCommands.addError(new ErrorIndigo(error,token, line, column));
+            System.out.println("Error en token:"+token+"\n"+error+" \n Linea: "+line+", Columna: "+column);
+	}
+	@Override
+	public void unrecovered_syntax_error(Symbol symbol){
+		syntax_error(symbol);
+	}
+
+:}
+
+terminal ERROR, OUT, WARNING, ROW, COL, LESS, GREATER, COLON, OPEN_CURLY, CLOSE_CURLY,
+OPEN_BRACKET, CLOSE_BRACKET, COMA, APERTURE, END, GREATAPERTURE, GREATCLOSE, BLOCK_PARAMETER, 
+TEXT, FILE, DUNO;
+
+non terminal great_start, great_close, option_request, simple_start, simple_close, start_request, close_request,
+F, multiple_start, request, request_re, request_alpha, init_block_parameter, parameter_comision, parameter_re, parameter;
+
+start with F;
+
+great_start ::= LESS GREATAPERTURE GREATER;
+
+great_close ::= LESS GREATCLOSE GREATER;
+
+option_request ::= ERROR {:RESULT = "ERROR";:}
+                    |OUT {:RESULT = "TEXT";:}
+                    |WARNING {:RESULT = "WARNING";:}
+                    |ROW {:RESULT = "ROW";:}
+                    |COL {:RESULT = "COL";:};
+
+simple_start ::= LESS APERTURE COLON TEXT GREATER {:handlers.add(parameter); :}; 
+simple_close ::= LESS END GREATER ;
+
+start_request ::= OPEN_CURLY BLOCK_PARAMETER COLON OPEN_BRACKET;
+
+close_request ::= CLOSE_BRACKET CLOSE_CURLY;
+
+F ::= multiple_start
+        |request;
+
+multiple_start ::= great_start request_re 
+                    |error request_re great_close;
+
+request ::= simple_start init_block_parameter  simple_close
+            |error init_block_parameter simple_close;
+
+request_re ::= simple_start init_block_parameter simple_close request_alpha  
+                |great_close
+                |error request_alpha;
+
+request_alpha ::= COMA simple_start init_block_parameter simple_close request_alpha
+                    |great_close
+                    |error request_alpha;
+
+init_block_parameter ::= start_request parameter_comision  close_request 
+                        |error parameter_comision close_request;
+
+parameter_comision ::= OPEN_CURLY parameter  parameter_re {:parameter.startNewListParameters();:}
+                |/*empty*/
+                |error parameter parameter_re;
+
+parameter_re ::= COMA OPEN_CURLY parameter  parameter_re {:parameter.startNewListParameters();:}
+                |/*empty*/;
+
+parameter ::= option_request:result COLON TEXT:text COMA parameter {:parameter.addParameter(String.valueOf(result), String.valueOf(text));:}
+                |CLOSE_CURLY {:parameter.startNewListParameters();:}
+                |error parameter;

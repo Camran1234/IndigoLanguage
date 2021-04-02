@@ -1,0 +1,235 @@
+package com.mycompany.formsafe;
+
+import com.mycompany.formats.*;
+import com.mycompany.handlers.*;
+import com.mycompany.indigo.TokenHandler;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java_cup.runtime.Symbol;
+
+parser code {:
+    FormCommands formCommands = new FormCommands();
+    UserCommands userCommands = new UserCommands();
+    ComponentCommands componentCommands = new ComponentCommands();
+    ErrorCommands errorCommands = new ErrorCommands(false);
+    ResultCommands resultCommands = new ResultCommands();
+    @Override
+	public void syntax_error(Symbol symbol){
+		/*
+		//This code works better with report_error(String message, Object info) method
+		if (info instanceof String){
+			errors++; 
+			System.err.println("  "+ errors + "==> " + info + " "+ message + 
+							"\n       Parsing resumed from 2nd token before" + s.current_lexeme()+"\n");
+		}
+		else {
+			StringBuffer m = new StringBuffer("Error ");
+			if (info instanceof java_cup.runtime.Symbol) 
+			m.append( "("+info.toString()+")" );     
+			m.append(" : "+message);   
+			System.err.println(m);
+		}*/
+    	report_expected_token_ids();
+	    int line = symbol.left;
+	    int column = symbol.right;
+	    String token = (String) cur_token.value;
+	    //We get the production
+            String errorArmado="";
+            TokenHandler tokenHandler = new TokenHandler();
+            for(int index=0; index<expected_token_ids().size() ; index++){
+                //We traduce the token to a form that the user might understand
+                errorArmado += tokenHandler.expectedFormIndigo(symbl_name_from_id(expected_token_ids().get(index)));
+            }
+            String error = "Se esperaba la forma: " + errorArmado;
+			errorCommands.addError(new ErrorIndigo(error,token, line, column));
+            System.out.println("Error en token:"+token+"\n"+error+" \n Linea: "+line+", Columna: "+column);
+	}
+	@Override
+	public void unrecovered_syntax_error(Symbol symbol){
+		syntax_error(symbol);
+	}
+
+    public UserCommands getUserCommands(){
+        return userCommands;
+    }
+
+	public FormCommands getFormCommands(){
+        return formCommands;
+    }
+
+    public ComponentCommands getComponentCommands(){
+        return componentCommands;
+    }
+    public ErrorCommands getErrorCommands(){
+        return errorCommands;
+    }
+    public ResultCommands getResultCommands(){
+        return resultCommands;
+    }
+:}
+
+terminal  NAME_C, FORM, CLASSN, TEXTV, ALIGNMENT, TEXT_CAMP, TEXT_AREA,
+CHECKBOX, RATIO, FILE, IMAGE, COMBO, BUTTON, REQUIRED, OPTIONS, ROWS, COLS,
+URL, OPEN_CURLY, CLOSE_CURLY, OPEN_PARENTHESIS, CLOSE_PARENTHESIS, COLON, COMA, 
+DBFORM, NEWFORM, IDFORM, FORMTITTLE, TOPIC, USER_CREATOR, STRUCT, ID_COMPONENT, 
+TEXT_WITHSPACES, TEXT_NOSPACES, BOOL, POSALIGNMENT, DATA, DBUSER, USER, PASSWORD, DATE, DUNO, VISIBILITY, PUBLIC, PRIVATE, NAME;
+
+non terminal doom, initform, form, formp, createform, createform_p, struct, struct_value, struct_param, classnames, struct_data,
+newstruct_param, data, data_value, data_param,  data_data, newdata_param, special_struct, user, user_struct, user_newstruct, poyo, poyo_reply, statevisibility;
+
+start with doom;
+
+initform::= OPEN_PARENTHESIS ;
+
+/* INIT */
+doom ::= DBFORM form 
+        |NEWFORM form
+        |DBUSER user
+        |/*empty*/
+        |error form;
+
+
+/* USERS*/
+
+user ::= OPEN_PARENTHESIS user_struct 
+        |error user_struct;
+
+
+//Open new User struct
+user_struct ::= OPEN_CURLY poyo  user_newstruct 
+                |CLOSE_PARENTHESIS
+                |error poyo user_newstruct;
+
+//Re-Open new User Struct
+user_newstruct ::= COMA OPEN_CURLY poyo  user_newstruct 
+                    |CLOSE_PARENTHESIS;
+//It close the petition of user
+poyo ::= USER COLON TEXT_NOSPACES:text poyo_reply {: userCommands.addUser(String.valueOf(text).replace("\"","")); Symbol sym = cur_token;
+            int row = sym.left;
+            int column = sym.right;userCommands.close(String.valueOf(sym.value),row,column);:}
+        |error poyo_reply /*The lowest error level of user*/;
+
+poyo_reply ::= COMA PASSWORD COLON TEXT_WITHSPACES:text poyo_reply {: userCommands.addPassword(String.valueOf(text).replace("\"","")); :}
+                |COMA PASSWORD COLON TEXT_NOSPACES:text poyo_reply {: userCommands.addPassword(String.valueOf(text).replace("\"","")); :}
+                |COMA DATE COLON TEXT_NOSPACES:text poyo_reply {: 
+                Date date=new SimpleDateFormat("yyyy-MM-dd").parse(String.valueOf(text).replace("\"",""));  
+                userCommands.addDate(date); :}
+                |CLOSE_CURLY {: Symbol sym = cur_token;
+                                int row = sym.left;
+                                int column = sym.right;
+                                userCommands.open(String.valueOf(sym.value),row,column); :};
+/* ENDS USERS*/
+
+form ::= OPEN_PARENTHESIS createform formp
+        |OPEN_PARENTHESIS CLOSE_PARENTHESIS
+        |error createform formp
+        |error formp;
+
+formp ::= COMA createform formp
+            |CLOSE_PARENTHESIS
+            |error createform formp
+            |error;
+/* END INIT */
+
+/* FORM */
+
+createform ::= OPEN_CURLY IDFORM COLON TEXT_NOSPACES:text createform_p CLOSE_CURLY{: Symbol sym = cur_token;
+            int row = sym.left;
+            int column = sym.right;formCommands.addId(String.valueOf(text).replace("\"",""));formCommands.close(String.valueOf(sym.value),row,column); 
+            :}
+                |error createform_p;
+
+statevisibility ::= PUBLIC {: RESULT = "PUBLIC"; :}
+                    |PRIVATE {: RESULT = "PRIVATE";:};
+
+createform_p ::= COMA FORMTITTLE COLON TEXT_WITHSPACES:text createform_p {: formCommands.addTittle(String.valueOf(text).replace("\"","")); :}
+                |COMA FORMTITTLE COLON TEXT_NOSPACES:text createform_p {: formCommands.addTittle(String.valueOf(text).replace("\"","")); :}
+                |COMA NAME COLON TEXT_NOSPACES:text createform_p {:formCommands.addName(String.valueOf(text).replace("\"",""));:}
+                |COMA TOPIC COLON TEXT_NOSPACES:text createform_p   {:formCommands.addTopic(String.valueOf(text).replace("\"",""));:}
+                |COMA USER_CREATOR COLON TEXT_NOSPACES:text createform_p    {:formCommands.addUser(String.valueOf(text).replace("\"",""));:}
+                |COMA VISIBILITY COLON statevisibility:text createform_p {:formCommands.addVisibleText(String.valueOf(text).replace("\"",""));:}
+                |struct;
+
+struct ::= STRUCT COLON struct_value {: Symbol sym = cur_token;
+                                        int row = sym.left;
+                                        int column = sym.right;
+                                        formCommands.start(String.valueOf(sym.value),row,column);:}
+            |error struct_value;
+
+struct_value ::= OPEN_PARENTHESIS struct_param  CLOSE_PARENTHESIS COMA data 
+                |error struct_param CLOSE_PARENTHESIS data {:System.out.println("Error en struct_value struct_param CLOSE_PARENTHESIS");:}
+                |error data {:System.out.println("Error en struct_value data");:};
+
+struct_param ::= OPEN_CURLY special_struct
+                |/*empty*/
+                |error special_struct {:System.out.println("Error en struct_param");:};
+
+classnames	::=	TEXT_CAMP:text  {: RESULT = "CAMPO_TEXTO"; :}
+				|TEXT_AREA:text {: RESULT = "AREA_TEXTO"; :}
+				|CHECKBOX:text {: RESULT = "CHECKBOX"; :}
+				|RATIO:text {: RESULT = "RADIO"; :}
+				|FILE:text {: RESULT = "FICHERO"; :}
+				|IMAGE:text {: RESULT = "IMAGEN"; :}
+				|COMBO:text {: RESULT = "COMBO"; :}
+				|BUTTON:text {: RESULT = "BOTON"; :};
+
+special_struct ::= ID_COMPONENT COLON TEXT_NOSPACES:text struct_data {:Symbol sym = cur_token;
+            int row = sym.left;
+            int column = sym.right;componentCommands.addId(String.valueOf(text).replace("\"","")); componentCommands.close(String.valueOf(sym.value), row, column); 
+            :};
+
+struct_data ::= COMA NAME_C COLON TEXT_WITHSPACES:text struct_data {: componentCommands.addCampName(String.valueOf(text).replace("\"","")); :}
+                |COMA NAME_C COLON TEXT_NOSPACES:text struct_data {: componentCommands.addCampName(String.valueOf(text).replace("\"","")); :}
+				|COMA FORM COLON TEXT_NOSPACES:text struct_data  {: componentCommands.addFormName(String.valueOf(text).replace("\"","")); :}
+				|COMA CLASSN COLON classnames:text struct_data {: componentCommands.addClassName(String.valueOf(text).replace("\"",""));:}
+				|COMA OPTIONS COLON TEXT_WITHSPACES:text struct_data {: componentCommands.addOptions(String.valueOf(text).replace("\"","")); :}
+                |COMA OPTIONS COLON TEXT_NOSPACES:text struct_data {: componentCommands.addOptions(String.valueOf(text).replace("\"","")); :}
+				|COMA TEXTV COLON TEXT_WITHSPACES:text struct_data {:componentCommands.addVisibleText(String.valueOf(text).replace("\"",""));:}
+                |COMA TEXTV COLON TEXT_NOSPACES:text struct_data {:componentCommands.addVisibleText(String.valueOf(text).replace("\"",""));:}
+				|COMA ALIGNMENT COLON POSALIGNMENT:text struct_data {: componentCommands.addAlign(String.valueOf(text).replace("\"","")); :}
+				|COMA REQUIRED COLON BOOL:text struct_data {: componentCommands.addRequired(String.valueOf(text).replace("\"","")); :}
+				|COMA ROWS COLON TEXT_NOSPACES:number struct_data {:componentCommands.addRows(String.valueOf(number).replace("\"",""));:}
+				|COMA COLS COLON TEXT_NOSPACES:number struct_data {:componentCommands.addCols(String.valueOf(number).replace("\"",""));:}
+				|COMA URL COLON TEXT_WITHSPACES:text struct_data {:componentCommands.addUrl(String.valueOf(text).replace("\"",""));:}
+                |COMA URL COLON TEXT_NOSPACES:text struct_data {:componentCommands.addUrl(String.valueOf(text).replace("\"",""));:}
+                |newstruct_param;
+
+newstruct_param ::= CLOSE_CURLY COMA struct_param {:Symbol sym=cur_token;
+                                                                                int row = sym.left;
+                                                                                int column = sym.right;
+                                                                                componentCommands.start(String.valueOf(sym.value),row,column);:}
+                    |CLOSE_CURLY {:Symbol sym=cur_token;
+                                        int row = sym.left;
+                                        int column = sym.right;
+                                        componentCommands.start(String.valueOf(sym.value),row,column);:};
+
+/* END FORM */
+
+/* DATOS_RECOPILADOS */
+data ::= DATA COLON data_value
+        |error data_value {:System.out.println("Error en data");:};
+
+data_value ::= OPEN_PARENTHESIS data_param CLOSE_PARENTHESIS 
+                |error data_param CLOSE_PARENTHESIS {:System.out.println("Error en data_value");:};
+
+data_param ::= OPEN_CURLY data_data  {:Symbol sym = cur_token;
+            int row = sym.left;
+            int column = sym.right;resultCommands.close(String.valueOf(sym.value),row,column);:}
+                |/*empty*/
+                |error data_data{:System.out.println("Error en data_param");:} ;
+
+data_data ::=   NAME_C COLON TEXT_NOSPACES:text data_data   {:resultCommands.addNameCamp(String.valueOf(text).replace("\"",""));:}
+                |COMA IDFORM COLON TEXT_NOSPACES:text data_data {:resultCommands.addIdForm(String.valueOf(text).replace("\"",""));:}
+                |COMA TEXT_NOSPACES:id COLON TEXT_WITHSPACES:context data_data {:resultCommands.addAnswer(String.valueOf(id).replace("\"",""),String.valueOf(context).replace("\"",""));:}
+                |COMA TEXT_NOSPACES:id COLON TEXT_NOSPACES:context data_data {:resultCommands.addAnswer(String.valueOf(id).replace("\"",""),String.valueOf(context).replace("\"",""));:}
+                |newdata_param;
+
+newdata_param ::= CLOSE_CURLY COMA data_param {:Symbol sym = cur_token;
+                                                                        int row = sym.left;
+                                                                        int column = sym.right;
+                                                                        resultCommands.newResult(String.valueOf(sym.value),row,column);:}
+                    | CLOSE_CURLY {:Symbol sym = cur_token;
+                                                                        int row = sym.left;
+                                                                        int column = sym.right;
+                                                                        resultCommands.newResult(String.valueOf(sym.value),row,column);:};
+/* END DATOS_RECOPILADOS */
