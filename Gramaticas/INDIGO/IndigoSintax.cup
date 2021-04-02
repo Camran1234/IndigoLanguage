@@ -268,7 +268,7 @@ terminal START, FINAL, APERTURE, END, CREDENTIAL, USER, PASSWORD, DATE, PAST_USE
 CREATE_U, MODIFY_U, DELETE_U, LOGIN_U, NEW_F, DELETE_F, MODIFY_F, FORM_PARAMETERS, ID, TOPIC, NAME_F, 
 ADD_C, DELETE_C, MODIFY_C, C_PARAMETERS, NAME_C, FORM, CLASS, TEXTV, TEXT_CAMP, TEXT_AREA, 
 CHECKBOX, RATIO, FILE, IMAGE, COMBO, BUTTON, REQUIRED, OPTIONS, ROWS, COLS, URL,  TEXTWS, TEXTWIS, BOOL, POSALIGNMENT, COMA, LESS, GREATER, COLON,
-OPEN_CURLY, CLOSE_CURLY, OPEN_BRACKET, CLOSE_BRACKET, TITTLE, ALIGNMENT, INDEX, DUNO; 
+OPEN_CURLY, CLOSE_CURLY, OPEN_BRACKET, CLOSE_BRACKET, TITTLE, ALIGNMENT, INDEX, DUNO, TEXTID; 
 
 non terminal sp, fp, so, ip, io,close, initf, initc, partiture, gcreate_partiture,
 gmodify_partiture, glogin_partiture, gcreate, gcreate_user, gmodify, gmodify_user, gdelete, gdelete_user, glogin,
@@ -372,7 +372,7 @@ start with ip;
 					|error gmodifyf_form;
 
 		gcreatef ::=	NEW_F initf gcreatef_form {: closeForm(); :};
-		gcreatef_form::= ID COLON TEXTWIS:text gcreatef_partiture {: addIdForm(String.valueOf(text).replace("\"","")); :}
+		gcreatef_form::= ID COLON TEXTID:text gcreatef_partiture {: addIdForm(String.valueOf(text).replace("\"","")); :}
 				|TITTLE COLON TEXTWS:text gcreatef_partiture {: addTittleForm(String.valueOf(text).replace("\"","")); :}
 				|TITTLE COLON TEXTWIS:text gcreatef_partiture {: addTittleForm(String.valueOf(text).replace("\"","")); :}
 				|NAME_F COLON TEXTWIS:text gcreatef_partiture {: addNameForm(String.valueOf(text).replace("\"","")); :}
@@ -384,12 +384,12 @@ start with ip;
 				|error gcreatef_partiture;
 		
 		gdeletef ::=	DELETE_F initf gdeletef_form ;
-		gdeletef_form::= ID COLON TEXTWIS:text close {: deleteForm(String.valueOf(text).replace("\"","")); :}
+		gdeletef_form::= ID COLON TEXTID:text close {: deleteForm(String.valueOf(text).replace("\"","")); :}
 						|error close
 						;
 	
 		gmodifyf ::=	MODIFY_F initf gmodifyf_form {: closeModifyForm(); :};
-		gmodifyf_form::= ID COLON TEXTWIS:text gmodifyf_partiture {: addIdForm(String.valueOf(text).replace("\"","")); :}
+		gmodifyf_form::= ID COLON TEXTID:text gmodifyf_partiture {: addIdForm(String.valueOf(text).replace("\"","")); :}
 				|TITTLE COLON TEXTWS:text gmodifyf_partiture {: addTittleForm(String.valueOf(text).replace("\"","")); :}
 				|TITTLE COLON TEXTWIS:text gmodifyf_partiture {: addTittleForm(String.valueOf(text).replace("\"","")); :}
 				|NAME_F COLON TEXTWIS:text gmodifyf_partiture {: addNameForm(String.valueOf(text).replace("\"","")); :}
@@ -429,7 +429,7 @@ start with ip;
 
 		createc ::=	ADD_C initc createc_component {:  closeComponent();:};
 
-		createc_component ::= 	ID COLON TEXTWIS:text createc_partiture {: addIdComponent(String.valueOf(text).replace("\"","")); :}
+		createc_component ::= 	ID COLON TEXTID:text createc_partiture {: addIdComponent(String.valueOf(text).replace("\"","")); :}
 					|NAME_C COLON TEXTWS:text createc_partiture {: addnCampName(String.valueOf(text).replace("\"","")); :}
 					|NAME_C COLON TEXTWIS:text createc_partiture {: addnCampName(String.valueOf(text).replace("\"","")); :}
 					|FORM COLON TEXTWIS:text createc_partiture {: addFormName(String.valueOf(text).replace("\"","")); :}
@@ -447,11 +447,11 @@ start with ip;
 					|error createc_partiture;
 
 		deletec ::=	DELETE_C initc deletec_component;
-		deletec_component ::=	ID COLON TEXTWIS:text COMA FORM COLON TEXTWIS:texto close {: deleteComponent(String.valueOf(text).replace("\"",""), String.valueOf(texto));:}
+		deletec_component ::=	ID COLON TEXTID:text COMA FORM COLON TEXTWIS:texto close {: deleteComponent(String.valueOf(text).replace("\"",""), String.valueOf(texto));:}
 								|error close;
 
 		modifyc ::=	MODIFY_C initc	modifyc_component {: closeModifyComponent();:};
-		modifyc_component ::=ID COLON TEXTWIS:text modifyc_partiture {: addIdComponent(String.valueOf(text).replace("\"","")); :}
+		modifyc_component ::=ID COLON TEXTID:text modifyc_partiture {: addIdComponent(String.valueOf(text).replace("\"","")); :}
 					|NAME_C COLON TEXTWS:text modifyc_partiture {: addnCampName(String.valueOf(text).replace("\"","")); :}
 					|NAME_C COLON TEXTWIS:text modifyc_partiture {: addnCampName(String.valueOf(text).replace("\"","")); :}
 					|FORM COLON TEXTWIS:text modifyc_partiture {: addFormName(String.valueOf(text).replace("\"","")); :}

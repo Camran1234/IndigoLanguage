@@ -22,6 +22,7 @@ public class symIndigo {
   public static final int ROWS = 42;
   public static final int DATE = 9;
   public static final int NEW_PASSWORD = 12;
+  public static final int TEXTID = 61;
   public static final int NAME_F = 23;
   public static final int BOOL = 47;
   public static final int REQUIRED = 40;
@@ -130,7 +131,8 @@ public class symIndigo {
   "TITTLE",
   "ALIGNMENT",
   "INDEX",
-  "DUNO"
+  "DUNO",
+  "TEXTID"
   };
 }
 

@@ -172,9 +172,13 @@ IniSolicitudes = \![i|I][n|N][i|I]_[s|S][o|O][l|L][i|I][c|C][i|I][t|T][u|U][d|D]
 	 <STRING> {
 	      \"                             { yybegin(YYINITIAL);
 						String result = string.toString();
-				                       	if(result.contains(" ")||result.contains("\n")||result.contains("\r")||result.contains("\t")){
+						char ch = result.charAt(0);
+				            if(result.contains(" ")||result.contains("\n")||result.contains("\r")||result.contains("\t")){
 								System.out.println(" CON ESPACIOS: "+string.toString()); 
 								return new Symbol(TEXTWS,yyline+1, yycolumn+1,string.toString());
+							}else if(ch == '-' ||ch=='_'||ch == '$'){
+								System.out.println(" Es TEXTID: "+string.toString()); 
+								return new Symbol(TEXTID,yyline+1, yycolumn+1,string.toString());
 							}else{
 								System.out.println(" SIN ESPACIOS: "+string.toString()); 
 								return new Symbol(TEXTWIS,yyline+1, yycolumn+1,string.toString());

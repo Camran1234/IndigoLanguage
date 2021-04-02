@@ -173,7 +173,7 @@ public class IndigoSyntax extends java_cup.runtime.lr_parser {
     "\002\000\010\003\127\063\126\070\052\001\002\000\014" +
     "\002\uff87\003\uff87\063\uff87\064\uff87\070\uff87\001\002\000" +
     "\014\002\uff86\003\uff86\063\uff86\064\uff86\070\uff86\001\002" +
-    "\000\004\060\155\001\002\000\010\003\127\063\126\070" +
+    "\000\004\077\155\001\002\000\010\003\127\063\126\070" +
     "\052\001\002\000\014\002\uff94\003\uff94\063\uff94\064\uff94" +
     "\070\uff94\001\002\000\004\060\160\001\002\000\010\003" +
     "\127\063\126\070\052\001\002\000\014\002\uff88\003\uff88" +
@@ -256,7 +256,7 @@ public class IndigoSyntax extends java_cup.runtime.lr_parser {
     "\003\302\063\301\070\052\001\002\000\010\003\302\063" +
     "\301\070\052\001\002\000\010\002\uffbc\003\uffbc\064\uffbc" +
     "\001\002\000\010\002\uffbb\003\uffbb\064\uffbb\001\002\000" +
-    "\004\060\334\001\002\000\010\003\302\063\301\070\052" +
+    "\004\077\334\001\002\000\010\003\302\063\301\070\052" +
     "\001\002\000\010\002\uffc0\003\uffc0\064\uffc0\001\002\000" +
     "\004\026\337\001\002\000\004\066\340\001\002\000\004" +
     "\071\341\001\002\000\004\067\342\001\002\000\020\003" +
@@ -264,14 +264,14 @@ public class IndigoSyntax extends java_cup.runtime.lr_parser {
     "\001\002\000\006\003\346\027\344\001\002\000\004\066" +
     "\350\001\002\000\010\002\uff84\003\uff84\064\uff84\001\002" +
     "\000\004\070\052\001\002\000\010\002\uff82\003\uff82\064" +
-    "\uff82\001\002\000\004\060\351\001\002\000\004\063\352" +
+    "\uff82\001\002\000\004\077\351\001\002\000\004\063\352" +
     "\001\002\000\004\037\353\001\002\000\004\066\354\001" +
     "\002\000\004\060\355\001\002\000\004\070\052\001\002" +
     "\000\010\002\uff83\003\uff83\064\uff83\001\002\000\006\003" +
     "\361\027\360\001\002\000\004\066\364\001\002\000\004" +
     "\070\052\001\002\000\010\002\uffb6\003\uffb6\064\uffb6\001" +
     "\002\000\010\002\uffb4\003\uffb4\064\uffb4\001\002\000\004" +
-    "\060\365\001\002\000\004\070\052\001\002\000\010\002" +
+    "\077\365\001\002\000\004\070\052\001\002\000\010\002" +
     "\uffb5\003\uffb5\064\uffb5\001\002\000\012\003\371\011\372" +
     "\012\374\013\373\001\002\000\010\002\uffe2\003\uffe2\064" +
     "\uffe2\001\002\000\010\003\u0101\063\u0100\070\052\001\002" +
@@ -320,7 +320,7 @@ public class IndigoSyntax extends java_cup.runtime.lr_parser {
     "\057\u0132\060\u0131\001\002\000\010\003\u0121\063\u0120\070" +
     "\052\001\002\000\010\003\u0121\063\u0120\070\052\001\002" +
     "\000\010\002\uff72\003\uff72\064\uff72\001\002\000\010\002" +
-    "\uff71\003\uff71\064\uff71\001\002\000\004\060\u0136\001\002" +
+    "\uff71\003\uff71\064\uff71\001\002\000\004\077\u0136\001\002" +
     "\000\010\003\u0121\063\u0120\070\052\001\002\000\010\002" +
     "\uff80\003\uff80\064\uff80\001\002\000\004\060\u0139\001\002" +
     "\000\010\003\u0121\063\u0120\070\052\001\002\000\010\002" +
@@ -365,7 +365,7 @@ public class IndigoSyntax extends java_cup.runtime.lr_parser {
     "\uffae\001\002\000\010\002\uffad\003\uffad\064\uffad\001\002" +
     "\000\004\060\u0171\001\002\000\010\003\u015d\063\u015c\070" +
     "\052\001\002\000\010\002\uffaf\003\uffaf\064\uffaf\001\002" +
-    "\000\010\002\uffaa\003\uffaa\064\uffaa\001\002\000\004\060" +
+    "\000\010\002\uffaa\003\uffaa\064\uffaa\001\002\000\004\077" +
     "\u0175\001\002\000\010\003\u015d\063\u015c\070\052\001\002" +
     "\000\010\002\uffb2\003\uffb2\064\uffb2\001\002\000\026\017" +
     "\021\020\033\021\042\022\030\023\027\024\022\025\013" +
@@ -1494,7 +1494,7 @@ class CUP$IndigoSyntax$actions {
           return CUP$IndigoSyntax$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 65: // gcreatef_form ::= ID COLON TEXTWIS gcreatef_partiture 
+          case 65: // gcreatef_form ::= ID COLON TEXTID gcreatef_partiture 
             {
               Object RESULT =null;
 		int textleft = ((java_cup.runtime.Symbol)CUP$IndigoSyntax$stack.elementAt(CUP$IndigoSyntax$top-1)).left;
@@ -1620,7 +1620,7 @@ class CUP$IndigoSyntax$actions {
           return CUP$IndigoSyntax$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 76: // gdeletef_form ::= ID COLON TEXTWIS close 
+          case 76: // gdeletef_form ::= ID COLON TEXTID close 
             {
               Object RESULT =null;
 		int textleft = ((java_cup.runtime.Symbol)CUP$IndigoSyntax$stack.elementAt(CUP$IndigoSyntax$top-1)).left;
@@ -1650,7 +1650,7 @@ class CUP$IndigoSyntax$actions {
           return CUP$IndigoSyntax$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 79: // gmodifyf_form ::= ID COLON TEXTWIS gmodifyf_partiture 
+          case 79: // gmodifyf_form ::= ID COLON TEXTID gmodifyf_partiture 
             {
               Object RESULT =null;
 		int textleft = ((java_cup.runtime.Symbol)CUP$IndigoSyntax$stack.elementAt(CUP$IndigoSyntax$top-1)).left;
@@ -1944,7 +1944,7 @@ class CUP$IndigoSyntax$actions {
           return CUP$IndigoSyntax$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 109: // createc_component ::= ID COLON TEXTWIS createc_partiture 
+          case 109: // createc_component ::= ID COLON TEXTID createc_partiture 
             {
               Object RESULT =null;
 		int textleft = ((java_cup.runtime.Symbol)CUP$IndigoSyntax$stack.elementAt(CUP$IndigoSyntax$top-1)).left;
@@ -2142,7 +2142,7 @@ class CUP$IndigoSyntax$actions {
           return CUP$IndigoSyntax$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 126: // deletec_component ::= ID COLON TEXTWIS COMA FORM COLON TEXTWIS close 
+          case 126: // deletec_component ::= ID COLON TEXTID COMA FORM COLON TEXTWIS close 
             {
               Object RESULT =null;
 		int textleft = ((java_cup.runtime.Symbol)CUP$IndigoSyntax$stack.elementAt(CUP$IndigoSyntax$top-5)).left;
@@ -2175,7 +2175,7 @@ class CUP$IndigoSyntax$actions {
           return CUP$IndigoSyntax$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 129: // modifyc_component ::= ID COLON TEXTWIS modifyc_partiture 
+          case 129: // modifyc_component ::= ID COLON TEXTID modifyc_partiture 
             {
               Object RESULT =null;
 		int textleft = ((java_cup.runtime.Symbol)CUP$IndigoSyntax$stack.elementAt(CUP$IndigoSyntax$top-1)).left;
