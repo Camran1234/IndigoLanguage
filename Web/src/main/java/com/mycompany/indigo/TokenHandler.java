@@ -14,121 +14,123 @@ public class TokenHandler {
     
     public String expectedFormIndigo(String token){
         if(token.equalsIgnoreCase("START")){
-            return "!ini_solicitudes";
+            return "!ini_solicitudes ";
         }else if(token.equalsIgnoreCase("FINAL")){
-            return "!fin_solicitudes";
+            return "!fin_solicitudes ";
         }else if(token.equalsIgnoreCase("APERTURE")){
-            return "!ini_solicitud";
+            return "!ini_solicitud ";
         }else if(token.equalsIgnoreCase("END")){
-            return "fin_solicitud!";
+            return "fin_solicitud! ";
         }else if(token.equalsIgnoreCase("CREDENTIAL")){
-            return "\"CREDENCIALES_USUARIO\"";
+            return "\"CREDENCIALES_USUARIO\" ";
         }else if(token.equalsIgnoreCase("USER")){
-            return "\"USUARIO\"";
+            return "\"USUARIO\" ";
         }else if(token.equalsIgnoreCase("PASSWORD")){
-            return "\"PASSWORD\"";
+            return "\"PASSWORD\" ";
         }else if(token.equalsIgnoreCase("DATE")){
-            return "\"FECHA_CREACION\" o \"FECHA_MODIFICACION\"";
+            return "\"FECHA_CREACION\" o \"FECHA_MODIFICACION\" ";
         }else if(token.equalsIgnoreCase("PAST_USER")){
-            return "\"USUARIO_ANTIGUO\"";
+            return "\"USUARIO_ANTIGUO\" ";
         }else if(token.equalsIgnoreCase("NEW_USER")){
-            return "\"USUARIO_NUEVO\"";
+            return "\"USUARIO_NUEVO\" ";
         }else if(token.equalsIgnoreCase("NEW_PASSWORD")){
-            return "\"NUEVO_PASSWORD\"";
+            return "\"NUEVO_PASSWORD\" ";
         }else if(token.equalsIgnoreCase("CREATE_U")){
-            return "\"CREAR_USUARIO\"";
+            return "\"CREAR_USUARIO\" ";
         }else if(token.equalsIgnoreCase("MODIFY_U")){
-            return "\"MODIFICAR_USUARIO\"";
+            return "\"MODIFICAR_USUARIO\" ";
         }else if(token.equalsIgnoreCase("DELETE_U")){
-            return "\"ELIMINAR_USUARIO\"";
+            return "\"ELIMINAR_USUARIO\" ";
         }else if(token.equalsIgnoreCase("LOGIN_U")){
-            return "\"LOGIN_USUARIO\"";
+            return "\"LOGIN_USUARIO\" ";
         }else if(token.equalsIgnoreCase("NEW_F")){
-            return "\"NUEVO_FORMULARIO\"";
+            return "\"NUEVO_FORMULARIO\" ";
         }else if(token.equalsIgnoreCase("DELETE_F")){
-            return "\"ELIMINAR_FORMULARIO\"";
+            return "\"ELIMINAR_FORMULARIO\" ";
         }else if(token.equalsIgnoreCase("MODIFY_F")){
-            return "\"MODIFICAR_FORMULARIO\"";
+            return "\"MODIFICAR_FORMULARIO\" ";
         }else if(token.equalsIgnoreCase("FORM_PARAMETERS")){
-            return "\"PARAMETROS_FORMULARIO\"";
+            return "\"PARAMETROS_FORMULARIO\" ";
         }else if(token.equalsIgnoreCase("ID")){
-            return "\"ID\"";
+            return "\"ID\" ";
         }else if(token.equalsIgnoreCase("TITTLE")){
-            return "\"TITULO\"";
+            return "\"TITULO\" ";
         }else if(token.equalsIgnoreCase("TOPIC")){
-            return "\"TEMA\"";
+            return "\"TEMA\" ";
         }else if(token.equalsIgnoreCase("NAME_F")){
-            return "\"NOMBRE\"";
+            return "\"NOMBRE\" ";
         }else if(token.equalsIgnoreCase("ADD_C")){
-            return "\"AGREGAR_COMPONENTE\"";
+            return "\"AGREGAR_COMPONENTE\" ";
         }else if(token.equalsIgnoreCase("DELETE_C")){
-            return "\"ELIMINAR_COMPONENTE\"";
+            return "\"ELIMINAR_COMPONENTE\" ";
         }else if(token.equalsIgnoreCase("MODIFY_C")){
-            return "\"MODIFICAR_COMPONENTE\"";
+            return "\"MODIFICAR_COMPONENTE\" ";
         }else if(token.equalsIgnoreCase("C_PARAMETERS")){
-            return "\"PARAMETROS_COMPONENTE\"";
+            return "\"PARAMETROS_COMPONENTE\" ";
         }else if(token.equalsIgnoreCase("NAME_C")){
-            return "\"NOMBRE_CAMPO\"";
+            return "\"NOMBRE_CAMPO\" ";
         }else if(token.equalsIgnoreCase("FORM")){
-            return "\"FORMULARIO\"";
+            return "\"FORMULARIO\" ";
         }else if(token.equalsIgnoreCase("CLASS")){
-            return "\"CLASE\"";
+            return "\"CLASE\" ";
         }else if(token.equalsIgnoreCase("TEXTV")){
-            return "\"TEXTO_VISIBLE\"";
+            return "\"TEXTO_VISIBLE\" ";
         }else if(token.equalsIgnoreCase("ALIGNMENT")){
-            return "\"ALINEACION\"";
+            return "\"ALINEACION\" ";
         }else if(token.equalsIgnoreCase("TEXT_CAMP")){
-            return "\"CAMPO_TEXTO\"";
+            return "\"CAMPO_TEXTO\" ";
         }else if(token.equalsIgnoreCase("TEXT_AREA")){
-            return "\"AREA_TEXTO\"";
+            return "\"AREA_TEXTO\" ";
         }else if(token.equalsIgnoreCase("CHECKBOX")){
-            return "\"CHECKBOX\"";
+            return "\"CHECKBOX\" ";
         }else if(token.equalsIgnoreCase("RATIO")){
-            return "\"RADIO\"";
+            return "\"RADIO\" ";
         }else if(token.equalsIgnoreCase("FILE")){
-            return "\"FICHERO\"";
+            return "\"FICHERO\" ";
         }else if(token.equalsIgnoreCase("IMAGE")){
-            return "\"IMAGEN\"";
+            return "\"IMAGEN\" ";
         }else if(token.equalsIgnoreCase("COMBO")){
-            return "\"COMBO\"";
+            return "\"COMBO\" ";
         }else if(token.equalsIgnoreCase("BUTTON")){
-            return "\"BOTON\"";
+            return "\"BOTON\" ";
         }else if(token.equalsIgnoreCase("REQUIRED")){
-            return "\"REQUERIDO\"";
+            return "\"REQUERIDO\" ";
         }else if(token.equalsIgnoreCase("OPTIONS")){
-            return "\"OPCIONES\"";
+            return "\"OPCIONES\" ";
         }else if(token.equalsIgnoreCase("ROWS")){
-            return "\"FILAS\"";
+            return "\"FILAS\" ";
         }else if(token.equalsIgnoreCase("COLS")){
-            return "\"COLUMNAS\"";
+            return "\"COLUMNAS\" ";
         }else if(token.equalsIgnoreCase("URL")){
-            return "\"URL\"";
+            return "\"URL\" ";
         }else if(token.equalsIgnoreCase("NUMBER")){
-            return "numero";
+            return "numero ";
         }else if(token.equalsIgnoreCase("POSALIGNMENT")){
-            return "\"CENTRO\"|\"IZQUIERDO\"|\"DERECHA\"|\"JUSTIFICAR\"";
+            return "\"CENTRO\"|\"IZQUIERDO\"|\"DERECHA\"|\"JUSTIFICAR\" ";
         }else if(token.equalsIgnoreCase("BOOL")){
-            return "\"SI\"|\"NO\"";
+            return "\"SI\"|\"NO\" ";
         }else if(token.equalsIgnoreCase("LESS")){
-            return "<";
+            return "< ";
         }else if(token.equalsIgnoreCase("GREATER")){
-            return ">";
+            return "> ";
         }else if(token.equalsIgnoreCase("COLON")){
-            return ":";
+            return ": ";
         }else if(token.equalsIgnoreCase("OPEN_CURLY")){
-            return "{";
+            return "{ ";
         }else if(token.equalsIgnoreCase("CLOSE_CURLY")){
-            return "}";
+            return "} ";
         }else if(token.equalsIgnoreCase("OPEN_BRACKET")){
-            return "[";
+            return "[ ";
         }else if(token.equalsIgnoreCase("CLOSE_BRACEKT")){
-            return "]";
+            return "] ";
         }else if(token.equalsIgnoreCase("TEXTWS")){
-            return "\"text_no_space\"";
+            return "\"text_no_space\" ";
         }else if(token.equalsIgnoreCase("TEXTWIS")){
-            return "\"text with spaces\"";
+            return "\"text with spaces\" ";
         }else if(token.equalsIgnoreCase("COMA")){
-            return ",";
+            return ", ";
+        }else if(token.equalsIgnoreCase("error")){
+            return " ";
         }
         
         

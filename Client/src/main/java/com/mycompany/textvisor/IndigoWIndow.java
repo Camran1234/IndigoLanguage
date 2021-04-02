@@ -5,10 +5,24 @@
  */
 package com.mycompany.textvisor;
 
+import Tables.Answer;
+import Tables.PrintResult;
 import WebComunication.WebSocket;
+import java.awt.BorderLayout;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import static javax.swing.JFileChooser.APPROVE_OPTION;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 
 /**
  *
@@ -21,6 +35,7 @@ public class IndigoWIndow extends javax.swing.JFrame {
      * Creates new form IndigoWIndow
      */
     public IndigoWIndow() {
+        
         initComponents();
     }
 
@@ -45,6 +60,17 @@ public class IndigoWIndow extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         textAreaOutputIndigo = new javax.swing.JTextArea();
+        jPanel4 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTextAreaSQL = new javax.swing.JTextArea();
+        jLabel2 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jPanel6 = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -67,6 +93,8 @@ public class IndigoWIndow extends javax.swing.JFrame {
 
         textAreaIndigo.setColumns(20);
         textAreaIndigo.setRows(5);
+        textAreaIndigo.setLineWrap(true);
+        textAreaIndigo. setWrapStyleWord(true);
         jScrollPane2.setViewportView(textAreaIndigo);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -166,6 +194,142 @@ public class IndigoWIndow extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Output Indigo", jPanel3);
 
+        jPanel5.setBackground(new java.awt.Color(204, 204, 204));
+
+        jTextAreaSQL.setColumns(20);
+        jTextAreaSQL.setRows(5);
+        jScrollPane3.setViewportView(jTextAreaSQL);
+
+        jLabel2.setFont(new java.awt.Font("Noto Sans CJK JP Medium", 1, 24)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setText("SQL");
+
+        jButton3.setText("RUN");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        WebSocket webSocket = new WebSocket();
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        try{
+            String[] forms = webSocket.getFormIds();
+            jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(forms));
+        }catch (Exception ex){
+            System.out.println("ERROR CARGANDO IDFORMS: "+ex.getMessage());
+        }
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("Exportar");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jButton5.setText("Importar");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(225, 225, 225)
+                        .addComponent(jLabel2))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 696, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
+                            .addComponent(jButton5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap())
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jButton3)
+                        .addGap(74, 74, 74)
+                        .addComponent(jButton5)
+                        .addGap(74, 74, 74)
+                        .addComponent(jButton4)
+                        .addGap(41, 41, 41)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(62, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("SQL", jPanel4);
+
+        jPanel7.setBackground(new java.awt.Color(204, 204, 204));
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 886, Short.MAX_VALUE)
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 647, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Tables", jPanel6);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -195,9 +359,18 @@ public class IndigoWIndow extends javax.swing.JFrame {
             String user = new WebSocket().getSession();
             userCreator=user;
             if(user!=null){
-                this.jLabelSession.setText("Sesion: "+user);
+                if(!user.equalsIgnoreCase("") && !user.contains("<body>") && !user.equalsIgnoreCase("\n"))
+                    this.jLabelSession.setText("Sesion: "+user);
+                    System.out.println("User: \""+user+"\"");
             }else{
                 this.jLabelSession.setText("Iniciar Sesion");
+            }
+            //Chargin new Forms
+            try{
+                String[] forms = webSocket.getFormIds();
+            jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(forms));
+            }catch (Exception ex){
+                System.out.println("ERROR CARGANDO IDFORMS: "+ex.getMessage());
             }
         } catch (Exception ex) {
             textAreaOutputIndigo.setText("Error: "+ex.getMessage());
@@ -214,8 +387,74 @@ public class IndigoWIndow extends javax.swing.JFrame {
             textAreaOutputIndigo.setText("Error: "+e.getMessage());
             e.printStackTrace();
         }
+        try{
+            WebSocket webSocket = new WebSocket();
+                String[] forms = webSocket.getFormIds();
+            jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(forms));
+        }catch (Exception ex){
+                System.out.println("ERROR CARGANDO IDFORMS: "+ex.getMessage());
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+         try {
+            String texto = jTextAreaSQL.getText();
+            WebSocket webSocket  = new WebSocket();
+            ArrayList<PrintResult> results = webSocket.sentPetitionSql(texto);
+            for(int index=0; index<results.size(); index++){
+                String[][] object = results.get(index).getRowsList();
+                JTable table = new JTable(object, results.get(index).getHeadersList());
+                JScrollPane scrollPane = new JScrollPane(table);
+                table.setFillsViewportHeight(true);
+                jPanel7.setLayout(new BorderLayout());
+                jPanel7.add(table.getTableHeader(), BorderLayout.PAGE_START);
+                jPanel7.add(table, BorderLayout.CENTER);
+            }
+        } catch (Exception ex) { 
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        try{
+            String text="";
+            JFileChooser fileOpener = new JFileChooser();
+            fileOpener.addChoosableFileFilter(new FileNameExtensionFilter("Map","board"));
+            fileOpener.setAcceptAllFileFilterUsed(false);
+            int seleccion = fileOpener.showOpenDialog(this);
+            
+            if(seleccion == APPROVE_OPTION){
+                text = fileOpener.getSelectedFile().getPath();
+                WebSocket webSocket  = new WebSocket();
+                webSocket.createFile(text);
+            }
+            this.setVisible(false);
+            this.dispose();
+        }catch(Throwable e){
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    /*
+    <!ini_solicitud:"CONSULTAR_DATOS">
+      { "CONSULTAS":[{
+            "CONSULTA-1": " SELECT TO FORM  ->  $form1  [] ",
+           }         
+         ]
+      }
+<fin_solicitud!>
+    
+    */
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -254,14 +493,25 @@ public class IndigoWIndow extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabelSession;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextArea jTextAreaSQL;
     private javax.swing.JTextArea textAreaIndigo;
     private javax.swing.JTextArea textAreaOutputIndigo;
     // End of variables declaration//GEN-END:variables

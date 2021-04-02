@@ -23,6 +23,6 @@ public class ErrorIndigo {
     }
     
     public String getMessage(){
-        return ("Error en "+messageError+" en "+token+"\n cerca de Linea: "+line+", Columna: "+column);
+        return ("Error en "+messageError.replace("\"","")+" en "+token+"\n cerca de Linea: "+line+", Columna: "+column);
     }
 }

@@ -7,6 +7,7 @@ package com.mycompany.indigo;
 
 import WebSocket.dBIndigo;
 import com.mycompany.formats.ErrorIndigo;
+import com.mycompany.formats.Parameter;
 import com.mycompany.formsafe.SafeWriter;
 import com.mycompany.formsafe.SqFormLexic;
 import com.mycompany.formsafe.SqFormSyntax;
@@ -18,8 +19,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.ArrayList;
+import com.mycompany.formats.BlockParameter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -81,6 +85,7 @@ public class Analysis {
             System.out.println("Error en getLoggedUser, Analysis class, Error: "+ex.getMessage());
             ex.printStackTrace();
         }
+        System.out.println("ENTRANDO A CAMBIAR EL ARCHIVO");
         new SafeWriter().writeToFile(newUser, pathLog);
     }
     
@@ -90,56 +95,65 @@ public class Analysis {
      * false for keep login
      * @param entryText 
      */
-    public void readText(String entryText, PrintWriter out){
+    public void readText(String entryText, ArrayList<BlockParameter> block){
         try {
-            out.println("Leyendo Archivos");
+            
+            ArrayList<Parameter> parameter = new ArrayList<>();
+            ArrayList<Parameter> parameterWar = new ArrayList<>();
+            parameter.add(new Parameter("Text","Leyendo Archivos\n"));
             Reader reader = new StringReader(entryText);
             IndigoLex scanner = new IndigoLex(reader);
             IndigoSyntax parser = new IndigoSyntax(scanner);
-            out.println("Traduciendo Archivos");
+            parameter.add(new Parameter("Text","Traduciendo Archivos\n"));
             parser.parse();
-            out.println("Obteniendo Componentes");
+            parameter.add(new Parameter("Text","Obteniendo Componentes\n"));
             ErrorCommands errorCommands = parser.getErrorCommands();
             UserCommands userCommands = parser.getUserCommands();
             FormCommands formCommands = parser.getFormCommands();
             ComponentCommands componentCommands = parser.getComponentCommands();
-            out.println("Comprobando componentes");
+            parameter.add(new Parameter("Text","Comprobando componentes\n"));
             formCommands.checkForErrors();
             userCommands.checkForErrors();
             componentCommands.checkForErrors();
             //if we have errors then we return the messages
             if(!errorCommands.haveErrors()){
-                dBIndigo dbIndigo = new dBIndigo(out);
-                out.println("Verificando Usuario");
+                dBIndigo dbIndigo = new dBIndigo(block);
+                parameter.add(new Parameter("Text","Verificando Usuario\n"));
                 //add the login
                 if(userCommands.getLoginList().size()>0){
                     String user = userCommands.getLoginList().get(userCommands.getLoginList().size()-1).getUser();
                     String password = userCommands.getLoginList().get(userCommands.getLoginList().size()-1).getPassword();
+                    
                     if(user!=null && password!=null){
-                        if(!dbIndigo.singUp(user,password,out)){
+                        if(!dbIndigo.singUp(user,password,block)){
                         //throw new Exception("El nombre de usuario o la contrasena no coinciden, vuelva intentar logearse");
-                        out.println("WARNING: El nombre de usuario:\""+user+"\" o la contrasena:\""+password+"\" no coinciden, intento de iniciar sesion fallido");
+                        parameterWar.add(new Parameter("Warning","El nombre de usuario:"+user+" o la contrasena:"+password+" no coinciden, intento de iniciar sesion fallido\n"));
+                        block.add(new BlockParameter(parameterWar));
                         }
                     }
                 }
                 //add the new Data
                 //We upload the new Data
-                out.println("Cargando Archivos");
-                dbIndigo.newRequest(formCommands, userCommands,componentCommands, out);
-                out.println("Actualizando Archivos");
+                parameter.add(new Parameter("Text","Cagando Archivos\n"));
+                dbIndigo.newRequest(formCommands, userCommands,componentCommands, block);
+                parameter.add(new Parameter("Text","Actualizando Archivos\n"));
                 dbIndigo.uploadNewDate(null);
-                out.println("Fin Archivos");
+                parameter.add(new Parameter("Text","Fin Archivo\n"));
+                block.add(new BlockParameter(parameter));
             }else{
                 System.out.println("Hay errores");
+                ArrayList<Parameter> parameterAux = new ArrayList<>();
                 for(ErrorIndigo error:errorCommands.getErrors()){
                     System.out.println("Error: "+error.getMessage());
-                    out.println(error.getMessage());
+                    parameterAux.add(new Parameter("Error",error.getMessage()+"\n"));
                 }
+                block.add(new BlockParameter(parameter));
+                 block.add(new BlockParameter(parameterAux));
             }
         } catch (Exception ex) {
             System.out.println("ERROR:\n en Analysis"+ex.getMessage());
             ex.printStackTrace();
-            out.println("ERROR: \n"+ex.getMessage());
+            block.add(new BlockParameter("Error: ",ex.getMessage()));
         }
         
     }

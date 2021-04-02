@@ -35,7 +35,6 @@ public class LogOutServer extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
          HttpSession session=request.getSession();  
             session.invalidate();
-         
          response.sendRedirect("./index.jsp");
     }
 

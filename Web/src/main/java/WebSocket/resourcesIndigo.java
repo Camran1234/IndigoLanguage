@@ -5,9 +5,12 @@
  */
 package WebSocket;
 
+import com.mycompany.formats.BlockParameter;
 import com.mycompany.indigo.Analysis;
+import com.mycompany.sqform.PackageResult;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -79,12 +82,16 @@ public class resourcesIndigo extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
         Stream<String> indigoCode = request.getReader().lines();
-        String text = indigoCode.collect(Collectors.joining());
+        String text = indigoCode.collect(Collectors.joining("\n"));
+        
         try (PrintWriter out = response.getWriter()) {
+            ArrayList<BlockParameter> block = new ArrayList<>();
             /* TODO output your page here. You may use following sample code. */
             Analysis analysis = new Analysis();
-            analysis.readText(text,out);
-            out.println("Compilacion Terminada");
+            //The PackageResult class print a indigo class
+            analysis.readText(text,block);
+            PackageResult result = new PackageResult();
+            result.printInfoAsBlock(block, out);
             out.flush();
         }
     }

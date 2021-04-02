@@ -39,6 +39,10 @@ public class dBIndigo {
         setExistingParameters(out);
     }
     
+    public dBIndigo (ArrayList<BlockParameter> block){
+        setExistingParameters(block);
+    }
+    
     public ArrayList<Form> getForms(){
         if(forms!=null){
             return forms;
@@ -62,6 +66,11 @@ public class dBIndigo {
         return aux;
         
     }
+    
+    public ArrayList<Component> getComponents(){
+        return components;
+    }
+    
     /**
      * Return the components of a specify form
      * @param user
@@ -76,6 +85,30 @@ public class dBIndigo {
         }
         return aux;
     }
+    
+    public ArrayList<Result> collectResults(String formId){
+        ArrayList<Result> aux = new ArrayList<>();
+        ArrayList<Result> results = safeReader.getResultCommands().getResults();
+        for(Result result:results){
+            if(result.getIdForm().equals(formId)){
+                aux.add(result);
+            }
+        }   
+        return aux;
+    }
+    
+     private void setExistingParameters(ArrayList<BlockParameter> block){
+        try {
+            checkIfExist();
+        } catch (IOException ex) {
+            System.out.println("Error: "+ex.getMessage());
+            ex.printStackTrace();
+        }
+        safeReader.readData(block);
+        users = safeReader.getUsers();
+        forms = safeReader.getForms();
+        components = safeReader.getComponents();
+     }
     
     /**
      * Method to get the db parameters
@@ -92,6 +125,7 @@ public class dBIndigo {
         users = safeReader.getUsers();
         forms = safeReader.getForms();
         components = safeReader.getComponents();
+        
     }
     
     private void checkIfExist() throws IOException{
@@ -134,19 +168,21 @@ public class dBIndigo {
      * @param password
      * @return 
      */
-    public boolean singUp(String user, String password, PrintWriter out){
+    public boolean singUp(String user, String password, ArrayList<BlockParameter> out){
         for(User user1:users){
             if(user1.getUser().equals(user) && user1.getPassword().equals(password)){
+                System.out.println("Logeado Como");
                 new Analysis().setLoggedUser(user);
-                out.println("Logeado como Usuario:"+user);
+                out.add(new BlockParameter("Text","Logeado como Usuario:"+user+"\n"));
                 return true;
             }
         }
         return false;
     }
     
-    public void newRequest(FormCommands formCommands, UserCommands userCommands, ComponentCommands componentCommands, PrintWriter out){
+    public void newRequest(FormCommands formCommands, UserCommands userCommands, ComponentCommands componentCommands, ArrayList<BlockParameter> out){
         try {
+            
             ArrayList<User> newUsers=userCommands.getUserList();
             ArrayList<User> modifyUsers=userCommands.getModifyList();
             ArrayList<String> deleteUsers=userCommands.getDeleteList();
@@ -157,7 +193,8 @@ public class dBIndigo {
             ArrayList<Component> modifyComponents = componentCommands.getModifyComponents();
             ArrayList<String> deleteComponents = componentCommands.getDeleteList();
             ArrayList<String> formDeleteComponents = componentCommands.getFormDeleteList();
-            
+            ArrayList<Parameter> parametersWarning = new ArrayList<>();
+            ArrayList<Parameter> parametersText = new ArrayList<>();
             //Adding the components
             for(Component component:newComponents){
                 boolean founded=false;
@@ -170,7 +207,7 @@ public class dBIndigo {
                     }
                 }
                 if(founded){
-                    out.println("WARNING: Ya existe el Componente: "+component.getId()+", en formulario: "+component.getFormName()+", no se puede agregar, cambiar id o formulario");
+                    parametersWarning.add(new Parameter("Warning","Ya existe el Componente: "+component.getId()+", en formulario: "+component.getFormName()+", no se puede agregar, cambiar id o formulario"));
                 }else{
                     components.add(component);
                 }
@@ -248,7 +285,7 @@ public class dBIndigo {
                 }
                 //If we haven't found the user
                 if(!founded){
-                    out.println("WARNING: No se encontro ningun Componente: "+requestComponent.getId()+" en formulario: "+requestComponent.getFormName()+" para modificarlo, ignorando...");
+                    parametersWarning.add(new Parameter("Warning","No se encontro ningun Componente: "+requestComponent.getId()+" en formulario: "+requestComponent.getFormName()+" para modificarlo, ignorando..."));
                 }
             }
             
@@ -261,11 +298,11 @@ public class dBIndigo {
                     if(idDelete.equals(component.getId()) && idForm.equals(component.getFormName())){
                         founded=true;
                         components.remove(component);
-                        System.out.println("Eliminando componente: "+idDelete+", formulario "+idForm);
+                        parametersText.add(new Parameter("Text: ","Eliminando componente: "+idDelete+", formulario "+idForm));
                     }
                 }
                 if(!founded){
-                    out.println("WARNING: No se encontro ningun Componente: "+idDelete+" de Formulario: "+idForm+" para eliminarlo, ignorando...");
+                    parametersWarning.add(new Parameter("Warning","No se encontro ningun Componente: "+idDelete+" de Formulario: "+idForm+" para eliminarlo, ignorando..."));
                 }
             }
             
@@ -281,7 +318,7 @@ public class dBIndigo {
                     }
                 }
                 if(founded){
-                    out.println("WARNING: Ya existe el Usuario: "+user.getUser()+", no se puede agregar");
+                    parametersWarning.add(new Parameter("Warning","Ya existe el Usuario: "+user.getUser()+", no se puede agregar"));
                 }else{
                     users.add(user);
                 }
@@ -305,7 +342,7 @@ public class dBIndigo {
                 }
                 //If we haven't found the user
                 if(!founded){
-                    out.println("WARNING: No se encontro ningun USUARIO: "+requestUser.getPastUser()+" para modificarlo, ignorando...");
+                    parametersWarning.add(new Parameter("Warning","No se encontro ningun USUARIO: "+requestUser.getPastUser()+" para modificarlo, ignorando..."));
                 }
             }
             //Deleting users
@@ -318,7 +355,7 @@ public class dBIndigo {
                     }
                 }
                 if(!founded){
-                    out.println("WARNING: No se encontro ningun USUARIO: "+idDelete+" para eliminarlo, ignorando...");
+                    parametersWarning.add(new Parameter("Warning","No se encontro ningun USUARIO: "+idDelete+" para eliminarlo, ignorando..."));
                 }
             }
 
@@ -333,15 +370,15 @@ public class dBIndigo {
                     }
                 }
                 if(founded){
-                    out.println("WARNING: No se pudo agregar el formulario "+form.getId()+", ya existe");
+                    parametersWarning.add(new Parameter("Warning"," No se pudo agregar el formulario "+form.getId()+", ya existe"));
                 }else{
                     if(form.getUserCreator()==null){
                         if(new Analysis().getLoggedUser()!=null){
                             form.setUser(new Analysis().getLoggedUser());
                             forms.add(form);
                         }else{
-                            out.println("WARNING: No se pudo agregar el formulario, porque el sistema no sabe a quien le pertenece el formulario\n"
-                                    + ", Iniciar Sesion para crear formulario");
+                            parametersWarning.add(new Parameter("Warning","No se pudo agregar el formulario, porque el sistema no sabe a quien le pertenece el formulario\n"
+                                    + ", Iniciar Sesion para crear formulario"));
                         }
                     }else{
                         forms.add(form);
@@ -363,7 +400,7 @@ public class dBIndigo {
                     }
                 }
                 if(!founded){
-                    out.println("WARNING: No se encontro el formulario con id: "+requestForm.getId()+", no se pudo modificar...");
+                    parametersWarning.add(new Parameter("Warning","No se encontro el formulario con id: "+requestForm.getId()+", no se pudo modificar..."));
                 }
             }
 
@@ -377,9 +414,17 @@ public class dBIndigo {
                     }
                 }
                 if(!founded){
-                    out.println("WARNING: No se pudo eliminar el formulario con id:"+idDelete+", no se encuentra en el sistema");
+                    parametersWarning.add(new Parameter("Warning","  No se pudo eliminar el formulario con id:"+idDelete+", no se encuentra en el sistema"));
                 }
             }
+            
+            if(parametersWarning.size()>0){
+                out.add(new BlockParameter(parametersWarning));
+            }
+            if(parametersText.size()>0){
+                out.add(new BlockParameter(parametersText));
+            }
+            
         } catch (Exception e) {
             System.out.println("Error en dbIndigo: "+e.getMessage());
             e.printStackTrace();
@@ -387,6 +432,10 @@ public class dBIndigo {
         
     }
 
+    public ArrayList<Result> getResults(){
+        return safeReader.getResultCommands().getResults();
+    }
+    
     /**
      * Upload the new Data getted, and update the files 
      */

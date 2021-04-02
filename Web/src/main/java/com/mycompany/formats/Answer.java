@@ -5,11 +5,13 @@
  */
 package com.mycompany.formats;
 
+import java.io.Serializable;
+
 /**
  *
  * @author camran1234
  */
-public class Answer {
+public class Answer implements Serializable{
     private String idUser;
     private String result;
     

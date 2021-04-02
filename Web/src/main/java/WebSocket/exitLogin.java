@@ -5,9 +5,12 @@
  */
 package WebSocket;
 
+import com.mycompany.formats.BlockParameter;
 import com.mycompany.indigo.Analysis;
+import com.mycompany.sqform.PackageResult;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -47,8 +50,13 @@ public class exitLogin extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try (PrintWriter out = response.getWriter()) {
+            System.out.println("CERRANDO SESION");
             new Analysis().setLoggedUser(null);
-            out.println("Sesion Cerrada");
+            ArrayList<BlockParameter> blocks = new ArrayList<>();
+            BlockParameter block = new BlockParameter("Text","Sesion Cerrada");
+            blocks.add(block);
+            PackageResult result = new PackageResult();
+            result.printInfoAsBlock(blocks, out);
             out.flush();
         }
     }

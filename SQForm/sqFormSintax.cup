@@ -1,19 +1,69 @@
-package com.sqform.SQFormLanguage;
+package com.mycompany.sqform;
+
+import com.mycompany.formats.ErrorIndigo;
 import java_cup.runtime.*;
 import java.util.ArrayList;
-
+import com.mycompany.handlers.*;
+import com.mycompany.indigo.TokenHandler;
+i   mport java_cup.runtime.XMLElement;
 parser code {:
+    ConsultCommands consultCommands = new ConsultCommands();
+    ErrorCommands errorCommands = new ErrorCommands(false);
 
+    public ErrorCommands getErrorCommands(){
+        return errorCommands;
+    }
 
+    public ConsultCommands getConsultCommands(){
+        return consultCommands;
+    }
+
+    @Override
+	public void syntax_error(Symbol symbol){
+		/*
+		//This code works better with report_error(String message, Object info) method
+		if (info instanceof String){
+			errors++; 
+			System.err.println("  "+ errors + "==> " + info + " "+ message + 
+							"\n       Parsing resumed from 2nd token before" + s.current_lexeme()+"\n");
+		}
+		else {
+			StringBuffer m = new StringBuffer("Error ");
+			if (info instanceof java_cup.runtime.Symbol) 
+			m.append( "("+info.toString()+")" );     
+			m.append(" : "+message);   
+			System.err.println(m);
+		}*/
+    	report_expected_token_ids();
+	    int line = symbol.left;
+	    int column = symbol.right;
+	    String token = (String) cur_token.value;
+	    //We get the production
+            String errorArmado="";
+            TokenHandler tokenHandler = new TokenHandler();
+            for(int index=0; index<expected_token_ids().size() ; index++){
+                //We traduce the token to a form that the user might understand
+                errorArmado += tokenHandler.expectedFormIndigo(symbl_name_from_id(expected_token_ids().get(index)));
+            }
+            String error = "Se esperaba la forma: " + errorArmado;
+			errorCommands.addError(new ErrorIndigo(error,token, line, column));
+            System.out.println("Error en token:"+token+"\n"+error+" \n Linea: "+line+", Columna: "+column);
+	}
+	@Override
+	public void unrecovered_syntax_error(Symbol symbol){
+		syntax_error(symbol);
+	}
 :}
 
 terminal LESS, GREATER, APERTURE, COLON, OPEN_CURLY, CLOSE_CURLY,
 OPEN_BRACKET, CLOSE_BRACKET, QUOTE_D, COMA, END, CONSULTDATA,
 INQUIRIES, CONSULT, TO, SELECT, TEXT, NUMBER, SPECIFICATION,
 MORE_THAN, LESSER_THAN, DIFFERENCE, AND, OR, NOT, GREATEAPERTURE,
-GREATCLOSE, EQUAL, WHERE;
+GREATCLOSE, EQUAL, WHERE, DUNO;
 
-non terminal beginning, multiple_start, multiple_close, sentence;
+non terminal multiple_start, multiple_close, raw_start, open_request, close_request, raw_close, sentence,
+            consult, consult_data, consult_data_re, operation, to_camps, camps, camps_re, logic_operators, operators,
+            conditions, new_condition, new_condition_re, beginning, sentence_re;
 
 start with  beginning;
 
@@ -25,40 +75,67 @@ open_request ::=   OPEN_CURLY INQUIRIES COLON OPEN_BRACKET OPEN_CURLY;
 close_request ::=   CLOSE_CURLY CLOSE_BRACKET CLOSE_CURLY;
 raw_close   ::= LESS END GREATER;
 
-begining ::= multiple_start sentence  multiple_close
+beginning ::= multiple_start sentence_re 
              |sentence
-             |error multiple_close;
-sentence ::= raw_start consult_data raw_close 
-            |error raw_close;
+             |error sentence multiple_close
+             |error sentence;
 
-consult_data ::= open_request CONSULT COLON operation  consult_data;
-                |/* empty */
-                |error consult_data;
+sentence ::= raw_start consult  
+            |error consult;
+sentence_re ::= raw_start consult sentence_re
+                |multiple_close
+                |error consult sentence_re;
 
-operation ::= QUOTE_D SELECT TO TEXT to_camps  QUOTE_D COMA
-                |/* empty */;
+consult ::=  open_request consult_data
+            |error consult_data;
 
-to_camps ::= OPEN_BRACKET camps CLOSE_BRACKET conditions;
+consult_data ::= CONSULT:text COLON operation consult_data_re {:
+                Symbol sym = cur_token;
+                int row = sym.left;
+                int column = sym.right;
+                consultCommands.addConsult(String.valueOf(text));
+               consultCommands.close(String.valueOf(sym.value),row,column);:}
+                |error consult_data_re
+                |error raw_close;
 
-camps ::=       TEXT camps_re
-                | /* empty */
-                | error CLOSE_BRACKET;
-camps_re ::=    COMA TEXT camps_re
-                | /* empty */;
+consult_data_re ::=  CONSULT:text COLON operation  {:
+                Symbol sym = cur_token;
+                int row = sym.left;
+                int column = sym.right;
+                consultCommands.addConsult(String.valueOf(text));
+                consultCommands.close(String.valueOf(sym.value),row,column);:}
+                |close_request raw_close;
 
-logic_operators ::= AND 
-                    |OR
-                    |NOT;
-operators ::=   MORE_THAN       
-                |LESSER_THAN
-                |DIFFERENCE
-                |EQUAL;
+operation ::= QUOTE_D SELECT TO TEXT:text to_camps {:System.out.println("In select");consultCommands.addIdForm(String.valueOf(text));:}
+                |error to_camps QUOTE_D;
 
-conditions ::=  WHERE OPEN_BRACKET new_condition CLOSE_BRACKET
-                | /* empty */ ;
+to_camps ::= OPEN_BRACKET camps {:System.out.println("In to_camps");:}
+            |error camps conditions
+            |error conditions;
 
-new_condition ::= TEXT operators NUMBER new_condition_re
-                    |TEXT operators SPECIFICATION_re
+camps ::=       TEXT:text camps_re {:System.out.println("camps 1");consultCommands.addCamp(String.valueOf(text));:}
+                | CLOSE_BRACKET conditions {:System.out.println("no camps"); :}
+                | error camps_re;
+camps_re ::=    COMA TEXT:text camps_re {:System.out.println("camps 2");consultCommands.addCamp(String.valueOf(text));:}
+                | CLOSE_BRACKET conditions {:System.out.println("stop camps");:};
+
+logic_operators ::= AND {:RESULT="AND"; :}
+                    |OR {:RESULT="OR";:}
+                    |NOT{:RESULT="NOT"; :} ;
+operators ::=   MORE_THAN   {:RESULT=">="; :}
+                |LESSER_THAN {:RESULT="<="; :}
+                |DIFFERENCE {:RESULT="!="; :}
+                |LESS {:RESULT="<"; :}
+                |GREATER {:RESULT=">"; :}
+                |EQUAL {:RESULT="="; :};
+
+conditions ::=  WHERE OPEN_BRACKET new_condition 
+                | QUOTE_D COMA {:System.out.println("in conditions QUOTE_D"); consultCommands.addNewConsult();:}
+                |error new_condition;
+
+new_condition ::= TEXT:camp operators:operator NUMBER:num new_condition_re {:consultCommands.addComparation(String.valueOf(camp),String.valueOf(operator).replace("\"",""),String.valueOf(num));:}
+                    |TEXT:camp operators:operator SPECIFICATION:spec new_condition_re {:consultCommands.addComparation(String.valueOf(camp),String.valueOf(operator).replace("\"",""),String.valueOf(spec));:}
                     |error new_condition_re;
-new_condition_re ::= logic_operators TEXT operators 
-                    | /* empty */;
+new_condition_re ::= logic_operators:logic TEXT:camp operators:operator NUMBER:num new_condition_re {:consultCommands.addLogicComparation(String.valueOf(logic).replace("\"",""),String.valueOf(camp),String.valueOf(operator).replace("\"",""),String.valueOf(num));:}
+                    |logic_operators:logic TEXT:camp operators:operator SPECIFICATION:spec new_condition_re {:consultCommands.addLogicComparation(String.valueOf(logic).replace("\"",""),String.valueOf(camp),String.valueOf(operator).replace("\"",""),String.valueOf(spec));:}
+                    | CLOSE_BRACKET QUOTE_D COMA {:consultCommands.addNewConsult();:};
